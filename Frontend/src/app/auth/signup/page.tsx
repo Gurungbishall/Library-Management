@@ -1,0 +1,308 @@
+"use client";
+
+import { useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { toast } from "@/components/hooks/use-toast";
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Eye, EyeOff } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
+const FormSchema = z.object({
+  username: z
+    .string()
+    .min(1, { message: "Please enter the Username" })
+    .max(50, { message: "Username must not exceed 50 characters" }),
+  email: z.string().email({ message: "Please enter a valid email address" }),
+  password: z
+    .string()
+    .min(1, { message: "Please enter the password" })
+    .max(25, { message: "Password must not exceed 25 characters" }),
+  phoneno: z
+    .string()
+    .length(10, { message: "Phone number should be exactly 10 digits" })
+    .regex(/^\d+$/, { message: "Phone number should only contain digits" }),
+
+  age: z
+    .number()
+    .min(18, { message: "Age must be at least 18" })
+    .max(100, { message: "Age must not exceed 100" }),
+
+  sex: z.string({ required_error: "Sex is required" }),
+  course: z.string({ required_error: "Course is required" }),
+  image: z.string({ required_error: "Please upload an image" }),
+});
+
+export default function Register() {
+  const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+
+  const Url = process.env.NEXT_PUBLIC_API;
+
+  const form = useForm<z.infer<typeof FormSchema>>({
+    resolver: zodResolver(FormSchema),
+    defaultValues: {
+      username: "",
+      email: "",
+      password: "",
+      phoneno: "",
+      age: 18,
+      sex: "",
+      course: "",
+      image: "",
+    },
+  });
+
+  const onSubmit = async (data: z.infer<typeof FormSchema>) => {
+    setLoading(true);
+
+    const formData = {
+      ...data,
+      age: data.age,
+    };
+
+    try {
+      const response = await fetch(`${Url}/auth/register`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify(formData),
+      });
+
+      const result = await response.json();
+      if (!response.ok) {
+        toast({
+          title: "Registration failed",
+          description: result.message,
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Registration successful",
+          description: result.message,
+          variant: "default",
+        });
+      }
+    } catch {
+      toast({
+        title: "An error occurred",
+        description: "Please try again later.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <main className="flex min-h-svh flex-col items-center justify-center bg-muted p-6 md:p-10">
+      <div className="w-full max-w-sm md:max-w-3xl">
+        <div className="flex flex-col gap-6 shadow-lg">
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="p-6 md:p-8 flex flex-col gap-6 "
+            >
+              <p className="text-balance text-center text-muted-foreground ">
+                Register to Big Library
+              </p>
+              <div className="grid md:grid-cols-2 gap-6">
+                <FormField
+                  control={form.control}
+                  name="username"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Student Name</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Ram"
+                          {...field}
+                          disabled={loading}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="aa@email.com"
+                          {...field}
+                          disabled={loading}
+                        />
+                      </FormControl>
+
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Password</FormLabel>
+                      <FormControl className="relative">
+                        <div>
+                          <Input
+                            placeholder="Enter password"
+                            type={showPassword ? "text" : "password"}
+                            {...field}
+                            disabled={loading}
+                          />
+                          <div className="absolute right-3 top-2">
+                            <button
+                              type="button"
+                              onClick={() => setShowPassword(!showPassword)}
+                            >
+                              {showPassword ? (
+                                <Eye className="h-5 w-5 text-gray-400" />
+                              ) : (
+                                <EyeOff className="h-5 w-5 text-gray-400" />
+                              )}
+                            </button>
+                          </div>
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="phoneno"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Phone Number</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="9878******"
+                          {...field}
+                          disabled={loading}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="age"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Age</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="18"
+                          type="number"
+                          {...field}
+                          disabled={loading}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="sex"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Sex</FormLabel>
+                      <Select
+                        value={field.value}
+                        onValueChange={(e) => {
+                          field.onChange(e);
+                        }}
+                        disabled={loading}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select Sex" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="male">Male</SelectItem>
+                          <SelectItem value="female">Female</SelectItem>
+                          <SelectItem value="other">Other</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="course"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Course</FormLabel>
+                      <Select
+                        value={field.value}
+                        onValueChange={(e) => {
+                          field.onChange(e);
+                        }}
+                        disabled={loading}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select Course" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="bsc.csit">Bsc.CSIT</SelectItem>
+                          <SelectItem value="bca">BCA</SelectItem>
+                          <SelectItem value="b.tech">B.Tech</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="image"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Image</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Enter image URL"
+                          {...field}
+                          disabled={loading}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <Button type="submit" disabled={loading}>
+                {loading ? "Loading" : "Register"}
+              </Button>
+            </form>
+          </Form>
+        </div>
+      </div>
+    </main>
+  );
+}
