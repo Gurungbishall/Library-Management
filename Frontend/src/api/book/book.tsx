@@ -66,7 +66,47 @@ export const getBookDetail = async (
       quantity: 0,
       available: 0,
       average_rating: 0,
-      image_url: "",
+      bookimage: "",
+      description: "",
     };
+  }
+};
+
+export const deleteBook = async (book_Id: number | null) => {
+  try {
+    if (book_Id === null || book_Id === 0) {
+      throw new Error("Invalid book ID");
+    }
+
+    const response = await fetch(`${Url}/book/deleteBook`, {
+      method: "POST",
+      body: JSON.stringify({ book_id: book_Id }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    });
+
+    if (!response.ok) {
+      toast({
+        title: "An error occurred",
+        description: "Please try again later.",
+        variant: "destructive",
+      });
+    } else {
+      const result = await response.json();
+      toast({
+        title: "Book deleted successfully",
+        description: result.message,
+        variant: "default",
+      });
+    }
+  } catch {
+    toast({
+      title: "An error occurred",
+      description: "Please try again later.",
+      variant: "destructive",
+    });
+    return [];
   }
 };

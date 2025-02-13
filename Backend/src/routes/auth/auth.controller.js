@@ -5,20 +5,9 @@ import {
   generateRefreshToken,
 } from "../model/user.model.js";
 
-// user signup
 const userSignUp = async (req, res) => {
-  const {
-    name,
-    email,
-    password,
-    phone_number,
-    sex,
-    age,
-    studying,
-    course,
-    role,
-    image_url,
-  } = req.body;
+  const { name, email, password, phone_number, age, sex, course } = req.body;
+  const userimage = req.file ? req.file.filename : null;
 
   if (
     !name ||
@@ -27,9 +16,7 @@ const userSignUp = async (req, res) => {
     !phone_number ||
     !sex ||
     !age ||
-    !studying ||
-    !course ||
-    !role
+    !course
   ) {
     return res.status(400).json({ message: "All fields are required" });
   }
@@ -44,25 +31,14 @@ const userSignUp = async (req, res) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    
+
     const result = await pool.query(
-      `INSERT INTO users (email, password, name, sex, age, studying, course, role, image_url, phone_number) 
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) 
-       RETURNING user_id, email, name, sex, age, studying, course, role, image_url, phone_number`,
-      [
-        email,
-        hashedPassword,
-        name,
-        sex,
-        age,
-        studying,
-        course,
-        role,
-        image_url,
-        phone_number,
-      ]
+      `INSERT INTO users (email, password, name, sex, age, course, userimage, phone_number) 
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8) 
+       RETURNING user_id, email, name, sex, age, course, userimage, phone_number`,
+      [email, hashedPassword, name, sex, age, course, userimage, phone_number]
     );
-    
+
     return res.status(201).json({
       message: "User signed up successfully",
     });
@@ -82,7 +58,7 @@ const userLogin = async (req, res) => {
 
   try {
     const query =
-      "SELECT user_id, name, password, role, image_url FROM users WHERE email = $1";
+      "SELECT user_id, name, password, role, userimage FROM users WHERE email = $1";
     const { rows } = await pool.query(query, [email]);
 
     if (rows.length === 0) {
@@ -134,7 +110,7 @@ const getProfile = async (req, res) => {
 
   try {
     const result = await pool.query(
-      "SELECT name, email, sex, age, studying, course, role, image_url FROM users WHERE user_id = $1",
+      "SELECT name, email, sex, age, studying, course, role, userimage FROM users WHERE user_id = $1",
       [userId]
     );
 
@@ -152,7 +128,7 @@ const getProfile = async (req, res) => {
         studying: result.rows[0].studying,
         course: result.rows[0].course,
         role: result.rows[0].role,
-        image_url: result.rows[0].image_url,
+        userimage: result.rows[0].userimage,
       },
     });
   } catch (error) {
@@ -163,7 +139,7 @@ const getProfile = async (req, res) => {
 
 // edit profile
 const editProfile = async (req, res) => {
-  const { name, email, sex, age, studying, course, role, image_url, user_id } =
+  const { name, email, sex, age, studying, course, role, userimage, user_id } =
     req.body;
 
   if (
@@ -191,10 +167,10 @@ const editProfile = async (req, res) => {
 
     const result = await pool.query(
       `UPDATE users 
-       SET name = $1, email = $2, sex = $3, age = $4, studying = $5, course = $6, role = $7, image_url = $8 
+       SET name = $1, email = $2, sex = $3, age = $4, studying = $5, course = $6, role = $7, userimage = $8 
        WHERE user_id = $9
-       RETURNING user_id, name, email, sex, age, studying, course, role, image_url`,
-      [name, email, sex, age, studying, course, role, image_url, user_id]
+       RETURNING user_id, name, email, sex, age, studying, course, role, userimage`,
+      [name, email, sex, age, studying, course, role, userimage, user_id]
     );
 
     if (result.rows.length === 0) {

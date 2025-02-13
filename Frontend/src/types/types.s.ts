@@ -9,7 +9,8 @@ export type BookType = {
   quantity: number;
   available: number;
   average_rating: number;
-  image_url: string;
+  bookimage: string;
+  description: string;
   };
 
 export type UserType = {
@@ -21,6 +22,29 @@ export type UserType = {
   studying: boolean;
   course: string;
   role: string;
-  image_url: string;
+  userimage: string;
   };
   
+
+export type LoanBookType = {
+    book_id: number;
+    loan_date: string; 
+    return_date: string | null;
+    due_date: string; 
+    returned: boolean;
+    title: string;
+    author: string;
+    category: string;
+    isbn: string;
+    bookimage: string;
+  };
+  
+
+ export type ArticleType = {
+    article_id:number;
+    title: string;
+    author: string;
+    articleimage: string;
+    description: string; 
+    average_rating: number;
+ } 

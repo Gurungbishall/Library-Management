@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Calendar, Clock1, X } from "lucide-react";
+import { Calendar, Clock1 } from "lucide-react";
 
 const TimeAndDate: React.FC = () => {
   const [currentTime, setCurrentTime] = useState<string>("");
@@ -7,32 +7,37 @@ const TimeAndDate: React.FC = () => {
 
   useEffect(() => {
     const updateTime = () => {
-      let time = new Date();
+      const time = new Date();
       let hours = time.getHours();
-      let minutes = time.getMinutes();
+      const minutes = time.getMinutes();
       let amPm = "";
 
       if (hours >= 12) {
-        hours = hours - 12;
         amPm = "PM";
-      } else if (hours === 0) {
-        hours = 12;
-        amPm = "AM";
       } else {
         amPm = "AM";
       }
 
-      let years = time.getFullYear();
-      let months = time.getMonth() + 1;
-      let days = time.getDate();
+      if (hours === 0) {
+        hours = 12;
+      } else if (hours > 12) {
+        hours = hours - 12;
+      }
+
+      const years = time.getFullYear();
+      const months = time.getMonth() + 1;
+      const days = time.getDate();
+
       const formattedHours = hours > 9 ? hours : "0" + hours;
       const formattedMinutes = minutes > 9 ? minutes : "0" + minutes;
 
       const timeString = `${formattedHours}:${formattedMinutes} ${amPm}`;
-      const dateString = `${months}/${days}/${years}`;
+      const dateString = `${months > 9 ? months : "0" + months}/${
+        days > 9 ? days : "0" + days
+      }/${years}`;
 
-      setCurrentTime(`${timeString}`);
-      setTodayDate(`${dateString}`);
+      setCurrentTime(timeString);
+      setTodayDate(dateString);
     };
 
     updateTime();

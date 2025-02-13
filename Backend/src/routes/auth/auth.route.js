@@ -6,15 +6,13 @@ import {
   getProfile,
   editProfile,
 } from "./auth.controller.js";
-
+import upload from "../../config/multer.config.js";
 const router = express.Router();
 
-router.post("/register", userSignUp);
+router.post("/register", upload.single("userimage"), userSignUp);
 router.post("/login", userLogin);
-
 router.post("/editDetails", editProfile);
 router.post("/logOut", userSignOut);
-
 router.get("/userDetails/:userId", getProfile);
 
 export default router;

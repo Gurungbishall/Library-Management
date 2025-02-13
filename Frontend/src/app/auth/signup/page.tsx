@@ -23,66 +23,79 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useRouter } from "next/navigation";
 
 const FormSchema = z.object({
-  username: z
+  name: z
     .string()
     .min(1, { message: "Please enter the Username" })
     .max(50, { message: "Username must not exceed 50 characters" }),
+
   email: z.string().email({ message: "Please enter a valid email address" }),
+
   password: z
     .string()
-    .min(1, { message: "Please enter the password" })
+    .min(8, { message: "Password must be at least 8 characters" })
     .max(25, { message: "Password must not exceed 25 characters" }),
-  phoneno: z
-    .string()
-    .length(10, { message: "Phone number should be exactly 10 digits" })
-    .regex(/^\d+$/, { message: "Phone number should only contain digits" }),
+
+  phone_number: z.string().regex(/^\+?\d{1,4}?[\d\s\-\(\)]{7,15}$/, {
+    message: "Phone number must be valid and can include country code",
+  }),
 
   age: z
-    .number()
-    .min(18, { message: "Age must be at least 18" })
-    .max(100, { message: "Age must not exceed 100" }),
+    .string()
+    .min(2, { message: "Age must be at least 18" })
+    .max(3, { message: "Age must not exceed 100" }),
 
-  sex: z.string({ required_error: "Sex is required" }),
-  course: z.string({ required_error: "Course is required" }),
-  image: z.string({ required_error: "Please upload an image" }),
+  sex: z.string().min(1, { message: "Sex is required" }),
+
+  course: z.string().min(1, { message: "Course is required" }),
+
+  userimage: z.any().optional(),
 });
 
 export default function Register() {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState<boolean>(false);
-
+  const router = useRouter();
   const Url = process.env.NEXT_PUBLIC_API;
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      username: "",
+      name: "",
       email: "",
       password: "",
-      phoneno: "",
-      age: 18,
+      phone_number: "",
+      age: "",
       sex: "",
       course: "",
-      image: "",
+      userimage: undefined,
     },
   });
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     setLoading(true);
 
-    const formData = {
-      ...data,
-      age: data.age,
-    };
+    const formData = new FormData();
+
+    formData.append("name", data.name);
+    formData.append("email", data.email);
+    formData.append("password", data.password);
+    formData.append("phone_number", data.phone_number);
+    formData.append("age", String(data.age));
+    formData.append("sex", data.sex);
+    formData.append("course", data.course);
+
+    if (data.userimage && data.userimage[0]) {
+      formData.append("userimage", data.userimage[0]);
+    }
 
     try {
       const response = await fetch(`${Url}/auth/register`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        body: formData,
         credentials: "include",
-        body: JSON.stringify(formData),
       });
 
       const result = await response.json();
@@ -98,6 +111,7 @@ export default function Register() {
           description: result.message,
           variant: "default",
         });
+        router.push("/auth/login");
       }
     } catch {
       toast({
@@ -125,7 +139,7 @@ export default function Register() {
               <div className="grid md:grid-cols-2 gap-6">
                 <FormField
                   control={form.control}
-                  name="username"
+                  name="name"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Student Name</FormLabel>
@@ -190,10 +204,9 @@ export default function Register() {
                     </FormItem>
                   )}
                 />
-
                 <FormField
                   control={form.control}
-                  name="phoneno"
+                  name="phone_number"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Phone Number</FormLabel>
@@ -280,14 +293,16 @@ export default function Register() {
                 />
                 <FormField
                   control={form.control}
-                  name="image"
+                  name="userimage"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Image</FormLabel>
+                      <FormLabel>Upload Image</FormLabel>
                       <FormControl>
                         <Input
-                          placeholder="Enter image URL"
-                          {...field}
+                          type="file"
+                          accept="image/*"
+                          ref={field.ref}
+                          onChange={(e) => field.onChange(e.target.files)}
                           disabled={loading}
                         />
                       </FormControl>

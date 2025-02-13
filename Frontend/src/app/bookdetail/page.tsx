@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { BookType } from "@/types/types.s";
-import { BookDetail } from "@/components/bookdetail/bookdetail";
+import { BookDetail } from "@/components/book/bookdetail";
 import HeaderBar from "@/components/headerBar";
 import { BooksOnCategory } from "@/components/dashboard/booksOnCategory";
 import { getBookDetail } from "@/api/book/book";

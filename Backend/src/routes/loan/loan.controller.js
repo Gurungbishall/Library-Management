@@ -2,10 +2,9 @@ import pool from "../../Database/db.js";
 
 //loan a book
 export const loanBook = async (req, res) => {
-  const { user_id, book_id, loan_date, return_date, due_date, returned } =
-    req.body;
+  const { user_id, book_id, due_date } = req.body;
 
-  if (!user_id || !book_id || !loan_date || !due_date) {
+  if (!user_id || !book_id || !due_date) {
     return res.status(400).json({ error: "Missing required fields" });
   }
 
@@ -60,14 +59,14 @@ export const loanBook = async (req, res) => {
     );
 
     const result = await pool.query(
-      `INSERT INTO loans (user_id, book_id, loan_date, return_date, due_date, returned, created_at, updated_at)
-       VALUES ($1, $2, $3, $4, $5, $6, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+      `INSERT INTO loans (user_id, book_id, loan_date, due_date, returned, created_at, updated_at)
+       VALUES ($1, $2, CURRENT_TIMESTAMP, $3, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
        RETURNING *`,
-      [user_id, book_id, loan_date, return_date, due_date, returned]
+      [user_id, book_id, due_date]
     );
 
     res.status(201).json({
-      message: "You heve successfully loan a Book",
+      message: "You have successfully borrowed the book.",
     });
   } catch (error) {
     console.error("Error creating loan:", error);
@@ -81,7 +80,7 @@ export const getUserLoans = async (req, res) => {
 
   try {
     const result = await pool.query(
-      `SELECT loans.loan_id, loans.book_id, loans.loan_date, loans.return_date, loans.due_date, loans.returned, books.title, books.author, books.category, books.isbn, books.image_url
+      `SELECT loans.book_id, loans.loan_date, loans.return_date, loans.due_date, loans.returned, books.title, books.author, books.category, books.isbn, books.bookimage
          FROM loans
          JOIN books ON loans.book_id = books.book_id
          WHERE loans.user_id = $1
@@ -93,7 +92,7 @@ export const getUserLoans = async (req, res) => {
       return res.status(404).json({ message: "No loans found for this user" });
     }
 
-    res.status(200).json(result.rows);
+    res.status(200).json({ data: result.rows });
   } catch (error) {
     console.error("Error fetching user loans:", error);
     res.status(500).json({ error: "Internal Server Error" });
