@@ -76,6 +76,7 @@ export default function Login() {
             description: result.message,
             variant: "default",
           });
+          router.push("/dashboard");
         } else {
           toast({
             title: "Login successful",

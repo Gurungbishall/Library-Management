@@ -13,7 +13,16 @@ export type BookType = {
   description: string;
   };
 
+  export type SearchedBookType = {
+    book_id: number;
+    title: string;
+    author: string;
+    average_rating: number;
+    bookimage: string;
+    };
+  
 export type UserType = {
+  user_id: number;
   name: string;
   email: string;
   password: string;
@@ -23,10 +32,12 @@ export type UserType = {
   course: string;
   role: string;
   userimage: string;
+  phone_number: string;
   };
   
 
 export type LoanBookType = {
+    loan_id: number;
     book_id: number;
     loan_date: string; 
     return_date: string | null;

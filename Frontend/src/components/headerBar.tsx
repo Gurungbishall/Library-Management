@@ -9,20 +9,14 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Input } from "./ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import NavLinks from "./navLinks";
+import { HeaderSearch } from "./search/headerSearch";
 import { useSession } from "@/app/context/authContext";
-import { useState } from "react";
 
 const HeaderBar = () => {
   const { setTheme } = useTheme();
   const { user, loading } = useSession();
-  const [searchQuery, setSearchQuery] = useState("");
-
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(e.target.value);
-  };
 
   return (
     <section className="flex flex-col">
@@ -65,12 +59,7 @@ const HeaderBar = () => {
             <span className="hidden md:block">{user?.name}</span>
           </div>
         )}
-        <Input
-          className="w-full md:w-1/2"
-          placeholder="Search"
-          value={searchQuery}
-          onChange={handleSearchChange}
-        />
+        <HeaderSearch />
         <TimeAndDate />
       </div>
       <div className="flex gap-8 items-center justify-center">

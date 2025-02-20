@@ -160,7 +160,7 @@ export const editBook = async (req, res) => {
     description,
   } = req.body;
 
-  let bookImage = req.body.bookimage;
+  let bookImage;
 
   if (req.file) {
     try {
@@ -183,10 +183,24 @@ export const editBook = async (req, res) => {
       }
 
       bookImage = req.file.filename;
-    } catch  {
+    } catch {
+      return res.status(500).json({ message: "Error deleting old image" });
+    }
+  } else {
+    try {
+      const result = await pool.query(
+        "SELECT bookimage FROM books WHERE book_id = $1",
+        [book_id]
+      );
+
+      const book = result.rows[0];
+      if (book && book.bookimage) {
+        bookImage = book.bookimage;
+      }
+    } catch {
       return res
         .status(500)
-        .json({ message: "Error deleting old image" });
+        .json({ message: "Error retrieving current image" });
     }
   }
 
@@ -263,7 +277,6 @@ export const deleteBook = async (req, res) => {
 
     return res.status(200).json({ message: "Book deleted successfully" });
   } catch (error) {
-    console.error(error);
     return res.status(500).json({ message: "Internal Server Error" });
   }
 };

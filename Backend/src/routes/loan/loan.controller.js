@@ -83,7 +83,7 @@ export const getUserLoans = async (req, res) => {
       `SELECT loans.book_id, loans.loan_date, loans.return_date, loans.due_date, loans.returned, books.title, books.author, books.category, books.isbn, books.bookimage
          FROM loans
          JOIN books ON loans.book_id = books.book_id
-         WHERE loans.user_id = $1
+         WHERE loans.user_id = $1 AND loans.returned = false
          ORDER BY loans.loan_date DESC`,
       [user_id]
     );

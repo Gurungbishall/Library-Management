@@ -249,7 +249,7 @@ export default function EditBook({
                         {...field}
                         value={
                           field.value
-                            ? String(field.value) // Convert to string for the input field
+                            ? String(field.value)
                             : String(data?.publication_year) || ""
                         }
                         onValueChange={(year) => {
@@ -261,7 +261,7 @@ export default function EditBook({
                           <SelectValue placeholder="Select Year" />
                         </SelectTrigger>
                         <SelectContent>
-                          {Array.from({ length: 100 }, (_, index) => {
+                          {Array.from({ length: 300 }, (_, index) => {
                             const year = new Date().getFullYear() - index;
                             return (
                               <SelectItem key={year} value={String(year)}>
@@ -282,11 +282,7 @@ export default function EditBook({
                     <FormItem>
                       <FormLabel>Quantity</FormLabel>
                       <FormControl>
-                        <Input
-                          placeholder="10"
-                          {...field}
-                          disabled={loading}
-                        />
+                        <Input placeholder="10" {...field} disabled={loading} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -299,11 +295,7 @@ export default function EditBook({
                     <FormItem>
                       <FormLabel>Available</FormLabel>
                       <FormControl>
-                        <Input
-                          placeholder="8"
-                          {...field}
-                          disabled={loading}
-                        />
+                        <Input placeholder="8" {...field} disabled={loading} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

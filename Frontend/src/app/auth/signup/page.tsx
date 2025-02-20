@@ -127,16 +127,16 @@ export default function Register() {
   return (
     <main className="flex min-h-svh flex-col items-center justify-center bg-muted p-6 md:p-10">
       <div className="w-full max-w-sm md:max-w-3xl">
-        <div className="flex flex-col gap-6 shadow-lg">
+        <div className=" shadow-lg">
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
-              className="p-6 md:p-8 flex flex-col gap-6 "
+              className="p-6 md:p-8 flex flex-col gap-2 md:gap-4 xl:gap-6 "
             >
-              <p className="text-balance text-center text-muted-foreground ">
+              <p className="font-bold text-balance text-center text-muted-foreground ">
                 Register to Big Library
               </p>
-              <div className="grid md:grid-cols-2 gap-6">
+              <div className="grid md:grid-cols-2 gap-2 md:gap-4 xl:gap-6">
                 <FormField
                   control={form.control}
                   name="name"

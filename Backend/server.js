@@ -4,6 +4,9 @@ import cookieParser from "cookie-parser";
 import authRoutes from "./src/routes/auth/auth.route.js";
 import bookRoutes from "./src/routes/book/book.route.js";
 import loanRoutes from "./src/routes/loan/loan.route.js";
+import searchRoutes from "./src/routes/search/search.route.js";
+import memberRoutes from "./src/routes/member/member.route.js";
+
 import articleRoutes from "./src/routes/article/article.route.js";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -29,7 +32,10 @@ app.use(cookieParser());
 app.use("/auth", authRoutes);
 app.use("/book", bookRoutes);
 app.use("/loan", loanRoutes);
+app.use("/search", searchRoutes);
 app.use("/article", articleRoutes);
+
+app.use("/admin", memberRoutes);
 
 app.listen(process.env.PORT, () => {
   console.log("Server has started ");

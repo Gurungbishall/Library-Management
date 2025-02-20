@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { BookType } from "@/types/types.s";
+import { UserType } from "@/types/types.s";
 import Image from "next/image";
 import { Button } from "../ui/button";
 import {
@@ -14,34 +14,37 @@ import {
 } from "@/components/ui/table";
 import { X } from "lucide-react";
 import { Input } from "../ui/input";
-import AddBook from "@/components/book/addBook";
-import EditBook from "./editBook";
+import AddBook from "@/components/member/addBook";
+import EditBook from "./editMember";
 import bookImg from "../../picture/The_Great_Gatsby_Cover_1925_Retouched.jpg";
-import { renderStars } from "../renderStars/renderStars";
-import DeleteBook from "./deleteBook";
-import { fetchManageBooks } from "@/api/search/search";
+import DeleteBook from "./deleteMember";
+import { fetchMembers } from "@/api/members/members";
+import { useSession } from "@/app/context/authContext";
+import { useRouter } from "next/navigation";
 
-export const ManageBooks = () => {
+export const ManageMembers = () => {
   const [addItem, setAddItem] = useState<string>("default");
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [selectBookID, setSelectBookId] = useState<number>(0);
-  const [selectBook, setSelectBook] = useState<BookType>();
-  const [data, setData] = useState<BookType[]>([]);
+  const [selectMemberID, setSelectMemberId] = useState<number>(0);
+  const [selectMember, setSelectMember] = useState<UserType>();
+  const [data, setData] = useState<UserType[]>([]);
+  const { setMember_Id } = useSession();
+
+  const router = useRouter();
 
   useEffect(() => {
-    const searchBooks = async () => {
+    const searchMembers = async () => {
       try {
-        const books = await fetchManageBooks({ searchBook: searchQuery });
-        setData(books);
-      } catch (error) {
-        console.error("Error fetching books:", error);
+        const members = await fetchMembers({ memberName: searchQuery });
+        setData(members);
+      } catch {
         setData([]);
       } finally {
       }
     };
 
     const timeoutId = setTimeout(() => {
-      searchBooks();
+      searchMembers();
     }, 500);
 
     return () => clearTimeout(timeoutId);
@@ -56,9 +59,9 @@ export const ManageBooks = () => {
       <div className="w-full h-full flex flex-col gap-4">
         <div className="flex w-full justify-between">
           <div className="w-1/2 md:w-1/3 flex flex-col gap-2">
-            <span>Manage Books</span>
+            <span>Manage Members</span>
             <Input
-              placeholder="Search books"
+              placeholder="Search members"
               value={searchQuery}
               onChange={handleSearchChange}
             />
@@ -69,7 +72,7 @@ export const ManageBooks = () => {
               setAddItem("add");
             }}
           >
-            Add Book
+            Add Member
           </Button>
         </div>
         <div className="w-full h-full flex gap-4 overflow-x-auto">
@@ -79,50 +82,53 @@ export const ManageBooks = () => {
                 <TableRow>
                   <TableHead>#</TableHead>
                   <TableHead>Image</TableHead>
-                  <TableHead>Title</TableHead>
-                  <TableHead>Author</TableHead>
-                  <TableHead>Category</TableHead>
-                  <TableHead>ISBN</TableHead>
-                  <TableHead>Publication Year</TableHead>
-                  <TableHead>Quantity</TableHead>
-                  <TableHead>Available</TableHead>
-                  <TableHead>Rating</TableHead>
-                  <TableHead>Description</TableHead>
+                  <TableHead>Name</TableHead>
+                  <TableHead>Email</TableHead>
+                  <TableHead>Sex</TableHead>
+                  <TableHead>Age</TableHead>
+                  <TableHead>Studying</TableHead>
+                  <TableHead>Course</TableHead>
+                  <TableHead>Role</TableHead>
+                  <TableHead>Phone</TableHead>
                   <TableHead>Action</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {data.map((book, index) => (
-                  <TableRow key={book.book_id}>
+                {data.map((member, index) => (
+                  <TableRow
+                    key={member.user_id}
+                    onClick={() => {
+                      setMember_Id(member.user_id);
+                      router.push("/memberdetails");
+                    }}
+                  >
                     <TableCell>{index + 1}</TableCell>
                     <TableCell>
                       <Image
                         src={
-                          book?.bookimage
-                            ? `${process.env.NEXT_PUBLIC_USER_IMAGE_LOCATION}/image/book/${book?.bookimage}`
+                          member?.userimage
+                            ? `${process.env.NEXT_PUBLIC_USER_IMAGE_LOCATION}/image/user/${member?.userimage}`
                             : bookImg
                         }
-                        alt={book.title}
+                        alt={member.name}
                         width={100}
                         height={100}
                       />
                     </TableCell>
-                    <TableCell>{book.title}</TableCell>
-                    <TableCell>{book.author}</TableCell>
-                    <TableCell>{book.category}</TableCell>
-                    <TableCell>{book.isbn}</TableCell>
-                    <TableCell>{book.publication_year}</TableCell>
-                    <TableCell>{book.quantity}</TableCell>
-                    <TableCell>{book.available}</TableCell>
-                    <TableCell>{renderStars(book.average_rating)}</TableCell>
-                    <TableCell className="text-start md:w-40 text-wrap">
-                      {book.description}
-                    </TableCell>
+                    <TableCell>{member.name}</TableCell>
+                    <TableCell>{member.email}</TableCell>
+                    <TableCell>{member.sex}</TableCell>
+                    <TableCell>{member.age}</TableCell>
+                    <TableCell>{member.studying ? "Yes" : "No"}</TableCell>
+                    <TableCell>{member.course}</TableCell>
+                    <TableCell>{member.role}</TableCell>
+                    <TableCell>{member.phone_number}</TableCell>
+
                     <TableCell className="flex gap-2">
                       <Button
                         onClick={() => {
-                          setSelectBookId(book.book_id);
-                          setSelectBook(book);
+                          setSelectMemberId(member.user_id);
+                          setSelectMember(member);
                           setAddItem("edit");
                         }}
                       >
@@ -131,7 +137,7 @@ export const ManageBooks = () => {
                       <Button
                         onClick={() => {
                           setAddItem("delete");
-                          setSelectBookId(book.book_id);
+                          setSelectMemberId(member.user_id);
                         }}
                       >
                         Delete
@@ -143,7 +149,7 @@ export const ManageBooks = () => {
             </Table>
           ) : (
             <span className="text-center text-gray-500">
-              No books available
+              No Members available
             </span>
           )}
         </div>
@@ -168,8 +174,8 @@ export const ManageBooks = () => {
             }}
           />
           <EditBook
-            book_id={selectBookID}
-            data={selectBook}
+            user_id={selectMemberID}
+            data={selectMember}
             setDefault={setAddItem}
           />
         </div>
@@ -182,7 +188,7 @@ export const ManageBooks = () => {
               setAddItem("default");
             }}
           />
-          <DeleteBook book_id={selectBookID} setDefault={setAddItem} />
+          <DeleteBook user_id={selectMemberID} setDefault={setAddItem} />
         </div>
       )}
     </>

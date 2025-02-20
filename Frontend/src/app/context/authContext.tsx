@@ -15,12 +15,14 @@ interface AuthContextType {
   isAuthenticated: boolean;
   user: UserType | null;
   book_Id: number | null;
+  member_Id: number | null;
   logOut: () => Promise<void>;
   fetchUserDetails: () => Promise<void>;
   setUser: React.Dispatch<React.SetStateAction<UserType | null>>;
   setIsAdmin: React.Dispatch<React.SetStateAction<boolean>>;
   setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
   setBook_Id: React.Dispatch<React.SetStateAction<number | null>>;
+  setMember_Id: React.Dispatch<React.SetStateAction<number | null>>;
   loading: boolean;
 }
 
@@ -39,6 +41,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [user, setUser] = useState<UserType | null>(null);
   const [book_Id, setBook_Id] = useState<number | null>(null);
+  const [member_Id, setMember_Id] = useState<number | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const Url = process.env.NEXT_PUBLIC_API;
 
@@ -66,6 +69,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       const result = await response.json();
       setUser(result.user);
       setIsAuthenticated(true);
+      setIsAdmin(result.user.role == "admin");
     } catch (error) {
       console.error(error);
       setIsAuthenticated(false);
@@ -120,12 +124,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         isAuthenticated,
         user,
         book_Id,
+        member_Id,
         setIsAdmin,
         setIsAuthenticated,
         setUser,
         fetchUserDetails,
         logOut,
         setBook_Id,
+        setMember_Id,
         loading,
       }}
     >

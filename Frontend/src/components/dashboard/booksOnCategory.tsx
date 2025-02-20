@@ -18,12 +18,12 @@ export const BooksOnCategory = ({ data }: { data: BookType[] }) => {
   const [selectedBookId, setSelectedBookId] = useState<number>();
   return (
     <>
-      <div className="w-full h-80 flex gap-4 overflow-x-auto">
+      <div className="w-full h-64 md:h-80 flex gap-4 overflow-x-auto">
         {data !== undefined && data.length > 0 ? (
           data.map((book) => (
             <Card
               key={book.book_id}
-              className="w-2/5 md:w-1/5 h-full flex-shrink-0 p-2 flex flex-col gap-1 md:gap-3 justify-between items-center rounded-lg hover:shadow-xl"
+              className="w-2/5 sm:w-2/6 md:w-3/12 xl:w-1/5 2xl:w-1/6 h-full flex-shrink-0 p-2 flex flex-col gap-1 md:gap-3 justify-between items-center rounded-lg hover:shadow-xl"
               onClick={() => {
                 setBook_Id(book.book_id);
                 router.push("/bookdetail");
@@ -38,10 +38,10 @@ export const BooksOnCategory = ({ data }: { data: BookType[] }) => {
                 height={100}
                 width={100}
                 alt={book.title}
-                className="md:w-36 md:h-44 rounded-l"
+                className="w-28 h-32 md:w-36 md:h-44 rounded-l"
               />
 
-              <div className="text-xs sm:text-base md:text-lg font-semibold text-center line-clamp-2">
+              <div className="text-xs md:text-base lg:text-lg font-semibold text-center line-clamp-2">
                 {book.title} by {book.author}
               </div>
 
