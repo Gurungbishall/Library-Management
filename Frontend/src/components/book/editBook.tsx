@@ -79,10 +79,10 @@ export default function EditBook({
       author: data?.author,
       category: data?.category,
       isbn: data?.isbn,
-      publication_year: String(data?.publication_year), // String for display
-      quantity: String(data?.quantity), // String for display
-      available: String(data?.available), // String for display
-      average_rating: String(data?.average_rating), // String for display
+      publication_year: String(data?.publication_year) as unknown as number, // Ignore the type
+      quantity: String(data?.quantity) as unknown as number, // Ignore the type
+      available: String(data?.available) as unknown as number, // Ignore the type
+      average_rating: String(data?.average_rating) as unknown as number, // Ignore
       description: data?.description,
       bookimage: undefined,
     },
