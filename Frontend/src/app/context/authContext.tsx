@@ -1,6 +1,5 @@
 "use client";
 
-import { toast } from "@/components/ui/use-toast";
 import React, {
   createContext,
   useContext,
@@ -8,6 +7,7 @@ import React, {
   useEffect,
   useCallback,
 } from "react";
+import { toast } from "@/components/ui/use-toast";
 import { UserType } from "@/types/types.s";
 import { useRouter } from "next/navigation";
 
@@ -15,12 +15,14 @@ interface AuthContextType {
   isAdmin: boolean;
   isAuthenticated: boolean;
   user: UserType | null;
+  user_Id: string | null;
   book_Id: number | null;
   member_Id: number | null;
   route: string;
   logOut: () => Promise<void>;
   fetchUserDetails: () => Promise<void>;
   setUser: React.Dispatch<React.SetStateAction<UserType | null>>;
+  setUser_Id: React.Dispatch<React.SetStateAction<string | null>>;
   setIsAdmin: React.Dispatch<React.SetStateAction<boolean>>;
   setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
   setBook_Id: React.Dispatch<React.SetStateAction<number | null>>;
@@ -43,6 +45,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [user, setUser] = useState<UserType | null>(null);
+  const [user_Id, setUser_Id] = useState<string | null>("");
   const [book_Id, setBook_Id] = useState<number | null>(null);
   const [member_Id, setMember_Id] = useState<number | null>(null);
   const [route, setRoute] = useState<string>("");
@@ -50,11 +53,18 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const Url = process.env.NEXT_PUBLIC_API;
   const router = useRouter();
 
-  const userId = sessionStorage.getItem("user_id");
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedUserId = sessionStorage.getItem("user_id");
+      setUser_Id(storedUserId);
+    }
+  }, []);
 
   const fetchUserDetails = useCallback(async () => {
+    if (!user_Id) return;
+
     try {
-      const response = await fetch(`${Url}/auth/userDetails/${userId}`, {
+      const response = await fetch(`${Url}/auth/userDetails/${user_Id}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -86,7 +96,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     } finally {
       setLoading(false);
     }
-  }, [Url, userId]);
+  }, [Url, user_Id]);
 
   const logOut = useCallback(async () => {
     try {
@@ -107,14 +117,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         });
       } else {
         toast({
-          title: "Logout Sucessfully",
+          title: "Logout Successfully",
           description: result.message,
           variant: "default",
         });
-
-        sessionStorage.clear();
-        router.push("/");
       }
+      sessionStorage.clear();
+      setUser_Id(null);
+      setIsAuthenticated(false);
+      setUser(null);
+      router.push("/");
     } catch {
       toast({
         title: "An error occurred",
@@ -125,12 +137,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, [Url, router]);
 
   useEffect(() => {
-    if (userId) {
+    if (user_Id) {
       fetchUserDetails();
     } else {
       setLoading(false);
     }
-  }, [fetchUserDetails, userId]);
+  }, [fetchUserDetails, user_Id]);
 
   return (
     <AuthContext.Provider
@@ -138,12 +150,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         isAdmin,
         isAuthenticated,
         user,
+        user_Id,
         book_Id,
         member_Id,
         route,
         setIsAdmin,
         setIsAuthenticated,
         setUser,
+        setUser_Id,
         fetchUserDetails,
         logOut,
         setBook_Id,

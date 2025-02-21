@@ -12,13 +12,14 @@ import { useRouter } from "next/navigation";
 import EditUser from "@/components/user/editUser";
 
 export default function Page() {
-  const { user, loading, } = useSession();
+  const { user, user_Id, loading, } = useSession();
   const router = useRouter();
   const [addItem, setAddItem] = useState<string>("default");
   const [selectUserID, setSelectUserID] = useState<number | null>(0);
   const [selectUser, setSelectUser] = useState<UserType | null>(null);
-  const userId = sessionStorage.getItem("user_id");
-  const parsedUserId = userId ? parseInt(userId, 10) : null;
+
+
+  const parsedUserId = user_Id ? parseInt(user_Id, 10) : null;
   return (
     <>
       <HeaderBar />

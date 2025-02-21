@@ -6,18 +6,16 @@ import HeaderBar from "@/components/headerBar";
 import { LoanBooks } from "@/components/loans/loanBooks";
 import { fetchLoansBooks } from "@/api/loan/loan";
 import { toast } from "@/components/hooks/use-toast";
+import { useSession } from "../context/authContext";
 
 const Page = () => {
   const [loanBooks, setLoanBooks] = useState<LoanBookType[]>([]);
-  const user_id = sessionStorage.getItem("user_id");
-
+  const { user_Id } = useSession();
   useEffect(() => {
     const fetchData = async () => {
-      if (user_id) {
-        // Convert user_id to a number if it's a valid string
-        const userIdNumber = Number(user_id);
+      if (user_Id) {
+        const userIdNumber = Number(user_Id);
 
-        // Check if user_id is a valid number before fetching
         if (!isNaN(userIdNumber)) {
           const data = await fetchLoansBooks(userIdNumber);
           setLoanBooks(data);
@@ -32,7 +30,7 @@ const Page = () => {
       }
     };
     fetchData();
-  }, [user_id]);
+  }, [user_Id]);
 
   return (
     <>

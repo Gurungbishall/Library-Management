@@ -1,5 +1,4 @@
 "use client";
-
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
@@ -26,7 +25,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import React from "react";
-
+import { useSession } from "@/app/context/authContext";
 const FormSchema = z.object({
   due_date: z.date({
     required_error: "A due date is required.",
@@ -43,11 +42,11 @@ export const AddBookinLoanList = ({
   book_id: number;
   setBoolean: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
+  const { user_Id } = useSession();
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
   });
   const Url = process.env.NEXT_PUBLIC_API;
-  const user_id = sessionStorage.getItem("user_id");
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     try {
@@ -57,7 +56,7 @@ export const AddBookinLoanList = ({
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          user_id: user_id,
+          user_id: user_Id,
           book_id: book_id,
           due_date: data.due_date.toISOString(),
         }),

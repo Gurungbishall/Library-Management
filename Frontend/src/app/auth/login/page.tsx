@@ -1,5 +1,4 @@
 "use client";
-
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -32,7 +31,7 @@ const FormSchema = z.object({
 export default function Login() {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const { setIsAdmin, setIsAuthenticated } = useSession();
+  const { setUser_Id, setIsAdmin, setIsAuthenticated } = useSession();
 
   const router = useRouter();
 
@@ -69,6 +68,7 @@ export default function Login() {
         setIsAuthenticated(true);
         const userId = result.user_id;
         sessionStorage.setItem("user_id", userId);
+        setUser_Id(userId);
         if (result.role == "admin") {
           setIsAdmin(true);
           toast({
