@@ -17,7 +17,8 @@ const app = express();
 const __filename = fileURLToPath(import.meta.url);
 export const __dirname = path.dirname(__filename);
 
-const allowedOrigins = process.env.Frontend_URL;
+// const allowedOrigins = process.env.Frontend_URL;
+const allowedOrigins = "https://library-management-gilt-two.vercel.app";
 
 const corsOptions = {
   origin: allowedOrigins,
