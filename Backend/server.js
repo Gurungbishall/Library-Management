@@ -10,6 +10,7 @@ import memberRoutes from "./src/routes/member/member.route.js";
 import articleRoutes from "./src/routes/article/article.route.js";
 import path from "path";
 import { fileURLToPath } from "url";
+const PORT = process.env.PORT || 3000;
 
 const app = express();
 
@@ -37,6 +38,6 @@ app.use("/article", articleRoutes);
 
 app.use("/admin", memberRoutes);
 
-app.listen(process.env.PORT, () => {
+app.listen(PORT, () => {
   console.log("Server has started ");
 });
