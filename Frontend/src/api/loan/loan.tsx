@@ -3,10 +3,8 @@ import { LoanBookType } from "@/types/types.s";
 
 const Url = process.env.NEXT_PUBLIC_API;
 
-export const fetchLoansBooks = async (): Promise<LoanBookType[]> => {
+export const fetchLoansBooks = async (user_id : number | null): Promise<LoanBookType[]> => {
   try {
-    const user_id = sessionStorage.getItem("user_id");
-
     const response = await fetch(`${Url}/loan/user/${user_id}`, {
       method: "GET",
       credentials: "include",

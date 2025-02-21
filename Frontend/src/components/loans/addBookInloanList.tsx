@@ -61,6 +61,7 @@ export const AddBookinLoanList = ({
           book_id: book_id,
           due_date: data.due_date.toISOString(),
         }),
+        credentials: "include",
       });
 
       const result = await response.json();

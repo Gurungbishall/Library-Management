@@ -43,18 +43,17 @@ const FormSchema = z.object({
 
   sex: z.string().min(1, { message: "Sex is required" }),
   course: z.string().min(1, { message: "Course is required" }),
-  role: z.string().min(1, { message: "Course is required" }),
 
   userimage: z.any().optional(),
 });
 
-export default function EditMember({
+export default function EditUser({
   user_id,
   data,
   setDefault,
 }: {
-  user_id: number;
-  data: UserType | undefined;
+  user_id: number | null;
+  data: UserType | null;
   setDefault: React.Dispatch<React.SetStateAction<string>>;
 }) {
   const [loading, setLoading] = useState(false);
@@ -68,11 +67,12 @@ export default function EditMember({
       sex: data?.sex,
       age: String(data?.age),
       course: data?.course,
-      role: data?.role,
       phone_number: data?.phone_number,
       userimage: undefined,
     },
   });
+
+  console.log(user_id);
 
   if (user_id === undefined || user_id === 0) {
     toast({
@@ -100,7 +100,6 @@ export default function EditMember({
     formData.append("sex", data.sex);
     formData.append("age", String(data.age));
     formData.append("course", data.course);
-    formData.append("role", data.role);
     formData.append("phone_number", data.phone_number);
 
     if (data.userimage && data.userimage[0]) {
@@ -110,7 +109,7 @@ export default function EditMember({
     }
 
     try {
-      const response = await fetch(`${Url}/admin/editMember/${user_id}`, {
+      const response = await fetch(`${Url}/auth/editDetails/${user_id}`, {
         method: "POST",
         body: formData,
         credentials: "include",
@@ -272,31 +271,6 @@ export default function EditMember({
                           <SelectItem value="bsc.csit">Bsc.CSIT</SelectItem>
                           <SelectItem value="bca">BCA</SelectItem>
                           <SelectItem value="b.tech">B.Tech</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="role"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Role</FormLabel>
-                      <Select
-                        value={field.value}
-                        onValueChange={(e) => {
-                          field.onChange(e);
-                        }}
-                        disabled={loading}
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select Role" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="user">User</SelectItem>
-                          <SelectItem value="admin">Admin</SelectItem>
                         </SelectContent>
                       </Select>
                       <FormMessage />

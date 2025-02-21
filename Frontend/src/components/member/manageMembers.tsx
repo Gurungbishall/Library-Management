@@ -99,7 +99,7 @@ export const ManageMembers = () => {
                     key={member.user_id}
                     onClick={() => {
                       setMember_Id(member.user_id);
-                      router.push("/memberdetails");
+                      router.push("/member/memberdetails");
                     }}
                   >
                     <TableCell>{index + 1}</TableCell>
@@ -126,7 +126,8 @@ export const ManageMembers = () => {
 
                     <TableCell className="flex gap-2">
                       <Button
-                        onClick={() => {
+                        onClick={(e) => {
+                          e.stopPropagation();
                           setSelectMemberId(member.user_id);
                           setSelectMember(member);
                           setAddItem("edit");
@@ -135,7 +136,8 @@ export const ManageMembers = () => {
                         Edit
                       </Button>
                       <Button
-                        onClick={() => {
+                        onClick={(e) => {
+                          e.stopPropagation();
                           setAddItem("delete");
                           setSelectMemberId(member.user_id);
                         }}

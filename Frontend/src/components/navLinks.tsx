@@ -8,13 +8,12 @@ const NavLinks = () => {
   const { isAdmin } = useSession();
   const links = isAdmin
     ? [
-        { href: "/dashboard", name: "Dashboard", icon: House },
+        { href: "/dashboard/admin", name: "Dashboard", icon: House },
         { href: "/category", name: "Category", icon: Info },
-        { href: "/member", name: "Members", icon: User },
+        { href: "/member/manageMember", name: "Members", icon: User },
       ]
     : [
-        { href: "/dashboard", name: "Dashboard", icon: House },
-        { href: "/category", name: "Category", icon: Info },
+        { href: "/dashboard/user", name: "Dashboard", icon: House },
         { href: "/loan", name: "My Shelf", icon: Book },
       ];
 

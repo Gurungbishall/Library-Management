@@ -5,16 +5,35 @@ import { LoanBookType } from "@/types/types.s";
 import HeaderBar from "@/components/headerBar";
 import { LoanBooks } from "@/components/loans/loanBooks";
 import { fetchLoansBooks } from "@/api/loan/loan";
+import { toast } from "@/components/hooks/use-toast";
+
 const Page = () => {
   const [loanBooks, setLoanBooks] = useState<LoanBookType[]>([]);
+  const user_id = sessionStorage.getItem("user_id");
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await fetchLoansBooks();
-      setLoanBooks(data);
+      if (user_id) {
+        // Convert user_id to a number if it's a valid string
+        const userIdNumber = Number(user_id);
+
+        // Check if user_id is a valid number before fetching
+        if (!isNaN(userIdNumber)) {
+          const data = await fetchLoansBooks(userIdNumber);
+          setLoanBooks(data);
+        } else {
+          // Handle invalid user_id scenario
+          toast({
+            title: "Invalid User ID",
+            description: "Please log in again.",
+            variant: "destructive",
+          });
+        }
+      }
     };
     fetchData();
-  }, []);
+  }, [user_id]);
+
   return (
     <>
       <HeaderBar />

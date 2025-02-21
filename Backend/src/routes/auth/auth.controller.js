@@ -4,6 +4,12 @@ import {
   generateAccessToken,
   generateRefreshToken,
 } from "../model/user.model.js";
+import path from "path";
+import fs from "fs";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const userSignUp = async (req, res) => {
   const { name, email, password, phone_number, age, sex, course } = req.body;
@@ -75,8 +81,16 @@ const userLogin = async (req, res) => {
     const accessToken = generateAccessToken(user);
     const refreshToken = generateRefreshToken(user);
 
+    res.cookie("access_token", accessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "Strict",
+    });
+
     res.cookie("refresh_token", refreshToken, {
       httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "Strict",
     });
 
     res.status(200).json({
@@ -97,6 +111,10 @@ const userSignOut = (req, res) => {
     httpOnly: true,
     expires: new Date(0),
   });
+  res.cookie("access_token", "", {
+    httpOnly: true,
+    expires: new Date(0),
+  });
   res.status(200).json({ message: "Logout successful" });
 };
 
@@ -104,13 +122,13 @@ const userSignOut = (req, res) => {
 const getProfile = async (req, res) => {
   const { userId } = req.params;
 
-  if (!userId) {
+  if (!userId || userId === null) {
     return res.status(400).json({ message: "User ID is required" });
   }
 
   try {
     const result = await pool.query(
-      "SELECT name, email, sex, age, studying, course, role, userimage FROM users WHERE user_id = $1",
+      "SELECT name, email, sex, age, studying, course, role, userimage, phone_number FROM users WHERE user_id = $1",
       [userId]
     );
 
@@ -129,6 +147,7 @@ const getProfile = async (req, res) => {
         course: result.rows[0].course,
         role: result.rows[0].role,
         userimage: result.rows[0].userimage,
+        phone_number: result.rows[0].phone_number,
       },
     });
   } catch (error) {
@@ -139,19 +158,10 @@ const getProfile = async (req, res) => {
 
 // edit profile
 const editProfile = async (req, res) => {
-  const { name, email, sex, age, studying, course, role, userimage, user_id } =
-    req.body;
+  const { user_id } = req.params;
+  const { name, email, sex, age, course, phone_number } = req.body;
 
-  if (
-    !name ||
-    !email ||
-    !sex ||
-    !age ||
-    !studying ||
-    !course ||
-    !role ||
-    !user_id
-  ) {
+  if (!name || !email || !sex || !age || !course || !phone_number) {
     return res.status(400).json({ message: "All fields are required" });
   }
 
@@ -164,25 +174,94 @@ const editProfile = async (req, res) => {
     if (checkUserQuery.rows.length > 0) {
       return res.status(400).json({ message: "Email already in use" });
     }
+  } catch (err) {
+    return res.status(500).json({
+      message: "Error checking email availability",
+      error: err.message,
+    });
+  }
 
-    const result = await pool.query(
-      `UPDATE users 
-       SET name = $1, email = $2, sex = $3, age = $4, studying = $5, course = $6, role = $7, userimage = $8 
-       WHERE user_id = $9
-       RETURNING user_id, name, email, sex, age, studying, course, role, userimage`,
-      [name, email, sex, age, studying, course, role, userimage, user_id]
-    );
+  let userImage;
 
-    if (result.rows.length === 0) {
+  if (req.file) {
+    try {
+      const result = await pool.query(
+        "SELECT userimage FROM users WHERE user_id = $1",
+        [user_id]
+      );
+
+      const user = result.rows[0];
+
+      if (user && user.userimage) {
+        const oldImagePath = path.join(
+          __dirname,
+          "../../..",
+          "public/image/user",
+          user.userimage
+        );
+        if (fs.existsSync(oldImagePath)) {
+          fs.unlinkSync(oldImagePath);
+        }
+      }
+
+      userImage = req.file.filename;
+    } catch {
+      return res.status(500).json({ message: "Error deleting old image" });
+    }
+  } else {
+    try {
+      const result = await pool.query(
+        "SELECT userimage FROM users WHERE user_id = $1",
+        [user_id]
+      );
+
+      const user = result.rows[0];
+      if (user && user.userimage) {
+        userImage = user.userimage;
+      }
+    } catch {
+      return res
+        .status(500)
+        .json({ message: "Error retrieving current image" });
+    }
+  }
+
+  try {
+    const query = `
+      UPDATE users
+      SET
+        name = $1,
+        email = $2,
+        sex = $3,
+        age = $4,
+        course = $5,
+        phone_number = $6,
+        userimage = $7,
+        updated_at = CURRENT_TIMESTAMP
+      WHERE user_id = $8
+      RETURNING *;
+    `;
+
+    const values = [
+      name,
+      email,
+      sex,
+      age,
+      course,
+      phone_number,
+      userImage,
+      user_id,
+    ];
+
+    const updatedUser = await pool.query(query, values);
+
+    if (updatedUser.rows.length > 0) {
+      return res.status(200).json({ message: "Member updated successfully" });
+    } else {
       return res.status(404).json({ message: "User not found" });
     }
-
-    return res.status(200).json({
-      message: "User profile updated successfully",
-    });
-  } catch (error) {
-    console.error("Error editing profile:", error);
-    return res.status(500).json({ message: "Internal server error" });
+  } catch {
+    return res.status(500).json({ message: "Error updating Member" });
   }
 };
 

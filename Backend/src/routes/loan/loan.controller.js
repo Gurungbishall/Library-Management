@@ -78,9 +78,12 @@ export const loanBook = async (req, res) => {
 export const getUserLoans = async (req, res) => {
   const { user_id } = req.params;
 
+  if (user_id === null)
+    return res.status(500).json({ message: "Null user_id" });
+  
   try {
     const result = await pool.query(
-      `SELECT loans.book_id, loans.loan_date, loans.return_date, loans.due_date, loans.returned, books.title, books.author, books.category, books.isbn, books.bookimage
+      `SELECT loans.loan_id, loans.book_id, loans.loan_date, loans.return_date, loans.due_date, loans.returned, books.title, books.author, books.category, books.isbn, books.bookimage
          FROM loans
          JOIN books ON loans.book_id = books.book_id
          WHERE loans.user_id = $1 AND loans.returned = false

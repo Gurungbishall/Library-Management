@@ -76,14 +76,14 @@ export default function Login() {
             description: result.message,
             variant: "default",
           });
-          router.push("/dashboard");
+          router.push("/dashboard/admin");
         } else {
           toast({
             title: "Login successful",
             description: result.message,
             variant: "default",
           });
-          router.push("/dashboard");
+          router.push("/dashboard/user");
         }
       }
     } catch (err) {

@@ -11,7 +11,7 @@ const router = express.Router();
 
 router.post("/register", upload.single("userimage"), userSignUp);
 router.post("/login", userLogin);
-router.post("/editDetails", editProfile);
+router.post("/editDetails/:user_id", upload.single("userimage"), editProfile);
 router.post("/logOut", userSignOut);
 router.get("/userDetails/:userId", getProfile);
 

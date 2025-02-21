@@ -43,6 +43,25 @@ export const editMember = async (req, res) => {
   const { user_id } = req.params;
   const { name, email, sex, age, course, role, phone_number } = req.body;
 
+  if (!name || !email || !sex || !age || !course || !role || !phone_number) {
+    return res.status(400).json({ message: "All fields are required" });
+  }
+
+  try {
+    const checkUserQuery = await pool.query(
+      `SELECT * FROM users WHERE email = $1 AND user_id != $2`,
+      [email, user_id]
+    );
+
+    if (checkUserQuery.rows.length > 0) {
+      return res.status(400).json({ message: "Email already in use" });
+    }
+  } catch (err) {
+    return res.status(500).json({
+      message: "Error checking email availability",
+      error: err.message,
+    });
+  }
   let userImage;
 
   if (req.file) {
@@ -173,66 +192,7 @@ export const deleteMember = async (req, res) => {
   }
 };
 
-//get individual member details
-
-export const getIndividualDetail = async (req, res) => {
-  const { user_id } = req.params;
-
-  if (user_id === null && user_id < 0) {
-    return res.status.json({ message: "No User_id" });
-  }
-  try {
-    const result = await pool.query(
-      `SELECT loans.loan_id, loans.book_id, loans.loan_date, loans.return_date, loans.due_date, loans.returned, 
-              books.title, books.author, books.category, books.isbn, books.bookimage,
-              users.user_id, users.name, users.email, users.password, users.sex, users.age,
-              users.studying, users.course, users.role, users.userimage, users.phone_number
-       FROM loans
-       JOIN books ON loans.book_id = books.book_id
-       JOIN users ON loans.user_id = users.user_id
-       WHERE loans.user_id = $1 AND loans.returned = false
-       ORDER BY loans.loan_date DESC`,
-      [user_id]
-    );
-
-    if (result.rows.length === 0) {
-      return res.status(404).json({ message: "No loans found for this user" });
-    }
-
-    const userData = {
-      user_id: result.rows[0].user_id,
-      name: result.rows[0].name,
-      email: result.rows[0].email,
-      sex: result.rows[0].sex,
-      age: result.rows[0].age,
-      studying: result.rows[0].studying,
-      course: result.rows[0].course,
-      role: result.rows[0].role,
-      userimage: result.rows[0].userimage,
-      phone_number: result.rows[0].phone_number,
-    };
-
-    const loansData = result.rows.map((row) => ({
-      loan_id:row.loan_id,
-      book_id: row.book_id,
-      loan_date: row.loan_date,
-      return_date: row.return_date,
-      due_date: row.due_date,
-      returned: row.returned,
-      title: row.title,
-      author: row.author,
-      category: row.category,
-      isbn: row.isbn,
-      bookimage: row.bookimage,
-    }));
-
-    res.status(200).json({ user: userData, loans: loansData });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-};
-
+// returnloanBook
 export const returnedloanBook = async (req, res) => {
   const { loan_id } = req.body;
   if (!loan_id) {
@@ -257,5 +217,120 @@ export const returnedloanBook = async (req, res) => {
     }
   } catch (err) {
     res.status(500).json({ smessage: "Error returning book." });
+  }
+};
+
+//Delete member return info
+export const deleteReturnedBookInfo = async (req, res) => {
+  const { loan_id } = req.body;
+
+  if (!loan_id) {
+    return res.status(400).json({ message: "Loan ID is required" });
+  }
+
+  try {
+    const loanResult = await pool.query(
+      `SELECT * FROM loans WHERE loan_id = $1 AND returned = true`,
+      [loan_id]
+    );
+
+    if (loanResult.rowCount === 0) {
+      return res.json({ message: "Loan not found or has not returned." });
+    }
+
+    const deleteResult = await pool.query(
+      `DELETE FROM loans WHERE loan_id = $1 AND returned = true`,
+      [loan_id]
+    );
+
+    if (deleteResult.rowCount > 0) {
+      res.json({ message: "Returned Book deleted" });
+    } else {
+      res.json({ message: "Not Found" });
+    }
+  } catch {
+    res.status(500).json({ message: "Error deleting " });
+  }
+};
+
+//get member loan lists
+export const getMemberLoanBooks = async (req, res) => {
+  const { user_id } = req.params;
+  const { search_Book } = req.query;
+
+  if (user_id === null) {
+    return res.status(500).json({ message: "Null user_id" });
+  }
+  try {
+    let query = `SELECT loans.loan_id, loans.book_id, loans.loan_date, loans.return_date, loans.due_date, loans.returned, 
+                        books.title, books.author, books.category, books.isbn, books.bookimage
+                  FROM loans
+                  JOIN books ON loans.book_id = books.book_id
+                 WHERE loans.user_id = $1 AND loans.returned = false`;
+
+    let params = [user_id];
+
+    if (search_Book) {
+      query += ` AND (books.title ILIKE $2 OR books.author ILIKE $2 OR books.category ILIKE $2)`;
+      params.push(`%${search_Book}%`);
+    }
+
+    query += ` ORDER BY loans.loan_date DESC`;
+
+    const result = await pool.query(query, params);
+
+    if (result.rows.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No loans found matching the search criteria." });
+    }
+
+    return res.status(200).json({
+      data: result.rows,
+    });
+  } catch (error) {
+    console.error("Error searching user loans:", error);
+    return res.status(500).json({ message: "Error searching for loans." });
+  }
+};
+
+//get member returnList
+export const getMemberReturnBooks = async (req, res) => {
+  const { user_id } = req.params;
+  const { search_Book } = req.query;
+
+  if (user_id === null) {
+    return res.status(500).json({ message: "Null user_id" });
+  }
+  try {
+    let query = `SELECT loans.loan_id, loans.book_id, loans.loan_date, loans.return_date, loans.due_date, loans.returned, 
+                        books.title, books.author, books.category, books.isbn, books.bookimage
+                  FROM loans
+                  JOIN books ON loans.book_id = books.book_id
+                 WHERE loans.user_id = $1 AND loans.returned = true`;
+
+    let params = [user_id];
+
+    if (search_Book) {
+      query += ` AND (books.title ILIKE $2 OR books.author ILIKE $2 OR books.category ILIKE $2)`;
+      params.push(`%${search_Book}%`);
+    }
+
+    query += ` ORDER BY loans.loan_date DESC`;
+
+    const result = await pool.query(query, params);
+
+    if (result.rows.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No loans found matching the search criteria." });
+    }
+
+    return res.status(200).json({
+      data: result.rows,
+    });
+  } catch (error) {
+    console.error("Error searching user loans:", error);
+    return res.status(500).json({ message: "Error searching for loans." });
   }
 };

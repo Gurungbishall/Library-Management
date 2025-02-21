@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardTitle } from "../ui/card";
 import { returnLoanBook } from "@/api/members/members";
 
-export default function ReturnLoanBook({
+export default function DeleteReturnBookInfo({
   loan_id,
   setDefault,
 }: {

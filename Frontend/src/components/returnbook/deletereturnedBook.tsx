@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardTitle } from "../ui/card";
-import { returnLoanBook } from "@/api/members/members";
-
-export default function ReturnLoanBook({
+import { deleteReturnedBook } from "@/api/members/members";
+export default function DeleteReturnedBook({
   loan_id,
   setDefault,
 }: {
@@ -15,14 +14,14 @@ export default function ReturnLoanBook({
   return (
     <Card className="w-1/2 md:w-1/5 px-3 md:px-1 py-5 flex flex-col gap-4 items-center justify-center">
       <CardTitle className="text-lg md:text-xl">
-        Did Student return Book ?
+        Do You want to delete ?
       </CardTitle>
       <Button
         disabled={loading}
         onClick={async () => {
           setLoading(true);
           try {
-            await returnLoanBook(loan_id);
+            await deleteReturnedBook(loan_id);
           } catch {
           } finally {
             setDefault("default");
@@ -30,7 +29,7 @@ export default function ReturnLoanBook({
           }
         }}
       >
-        Return 
+        Delete
       </Button>
     </Card>
   );

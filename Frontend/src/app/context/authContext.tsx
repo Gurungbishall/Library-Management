@@ -9,6 +9,7 @@ import React, {
   useCallback,
 } from "react";
 import { UserType } from "@/types/types.s";
+import { useRouter } from "next/navigation";
 
 interface AuthContextType {
   isAdmin: boolean;
@@ -16,6 +17,7 @@ interface AuthContextType {
   user: UserType | null;
   book_Id: number | null;
   member_Id: number | null;
+  route: string;
   logOut: () => Promise<void>;
   fetchUserDetails: () => Promise<void>;
   setUser: React.Dispatch<React.SetStateAction<UserType | null>>;
@@ -23,6 +25,7 @@ interface AuthContextType {
   setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
   setBook_Id: React.Dispatch<React.SetStateAction<number | null>>;
   setMember_Id: React.Dispatch<React.SetStateAction<number | null>>;
+  setRoute: React.Dispatch<React.SetStateAction<string>>;
   loading: boolean;
 }
 
@@ -42,8 +45,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<UserType | null>(null);
   const [book_Id, setBook_Id] = useState<number | null>(null);
   const [member_Id, setMember_Id] = useState<number | null>(null);
+  const [route, setRoute] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
   const Url = process.env.NEXT_PUBLIC_API;
+  const router = useRouter();
 
   const userId = sessionStorage.getItem("user_id");
 
@@ -70,8 +75,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setUser(result.user);
       setIsAuthenticated(true);
       setIsAdmin(result.user.role == "admin");
-    } catch (error) {
-      console.error(error);
+    } catch {
+      toast({
+        title: "An error occurred",
+        description: "Please try again later.",
+        variant: "destructive",
+      });
       setIsAuthenticated(false);
       setUser(null);
     } finally {
@@ -80,9 +89,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, [Url, userId]);
 
   const logOut = useCallback(async () => {
-    sessionStorage.clear();
     try {
-      const response = await fetch(`${Url}/auth/user`, {
+      const response = await fetch(`${Url}/auth/logout`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -93,21 +101,28 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       const result = await response.json();
       if (!response.ok) {
         toast({
-          title: "Error not found",
-          description: result.message,
+          title: "An error occurred",
+          description: "Please try again later.",
           variant: "destructive",
         });
       } else {
         toast({
-          title: "Logout Successfully",
+          title: "Logout Sucessfully",
           description: result.message,
           variant: "default",
         });
+
+        sessionStorage.clear();
+        router.push("/");
       }
-    } catch (error) {
-      console.error("Failed to log out:", error);
+    } catch {
+      toast({
+        title: "An error occurred",
+        description: "Please try again later.",
+        variant: "destructive",
+      });
     }
-  }, [Url]);
+  }, [Url, router]);
 
   useEffect(() => {
     if (userId) {
@@ -125,6 +140,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         user,
         book_Id,
         member_Id,
+        route,
         setIsAdmin,
         setIsAuthenticated,
         setUser,
@@ -132,6 +148,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         logOut,
         setBook_Id,
         setMember_Id,
+        setRoute,
         loading,
       }}
     >
