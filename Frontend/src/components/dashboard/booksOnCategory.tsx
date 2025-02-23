@@ -14,16 +14,16 @@ export const BooksOnCategory = ({ data }: { data: BookType[] }) => {
   const router = useRouter();
   const { setBook_Id } = useSession();
 
-  const [selectedBook, setSelectedBook] = useState<boolean>(false);
+  const [addItem, setAddItem] = useState<string>("default");
   const [selectedBookId, setSelectedBookId] = useState<number>();
   return (
     <>
-      <div className="w-full h-64 md:h-80 flex gap-4 overflow-x-auto">
+      <div className="w-full flex gap-4 overflow-x-auto">
         {data !== undefined && data.length > 0 ? (
           data.map((book) => (
             <Card
               key={book.book_id}
-              className="w-2/5 sm:w-2/6 md:w-3/12 xl:w-1/5 2xl:w-1/6 h-full flex-shrink-0 p-2 flex flex-col gap-1 md:gap-3 justify-between items-center rounded-lg hover:shadow-xl"
+              className="w-2/5 sm:w-2/6 md:w-3/12 xl:w-1/6 h-64 md:h-80 xl:h-[350px] flex-shrink-0 p-2 flex flex-col gap-1 md:gap-3 justify-between items-center rounded-lg hover:shadow-xl"
               onClick={() => {
                 setBook_Id(book.book_id);
                 router.push("/bookdetail");
@@ -54,7 +54,7 @@ export const BooksOnCategory = ({ data }: { data: BookType[] }) => {
                 onClick={(e) => {
                   e.stopPropagation();
                   setSelectedBookId(book.book_id);
-                  setSelectedBook(true);
+                  setAddItem("loan");
                 }}
               >
                 Borrow
@@ -65,18 +65,15 @@ export const BooksOnCategory = ({ data }: { data: BookType[] }) => {
           <span className="text-center text-gray-500">No books available</span>
         )}
       </div>
-      {selectedBook && selectedBookId !== undefined && (
+      {addItem === "loan" && selectedBookId !== undefined && (
         <div className="absolute w-screen h-screen inset-0 flex justify-center items-center bg-black bg-opacity-50">
           <X
             className="top-20 left-5 p-1 md:size-8 absolute bg-white rounded-lg"
             onClick={() => {
-              setSelectedBook(false);
+              setAddItem("default");
             }}
           />
-          <AddBookinLoanList
-            book_id={selectedBookId}
-            setBoolean={setSelectedBook}
-          />
+          <AddBookinLoanList book_id={selectedBookId} setDefault={setAddItem} />
         </div>
       )}
     </>

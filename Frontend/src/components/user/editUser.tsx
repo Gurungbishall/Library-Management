@@ -72,8 +72,6 @@ export default function EditUser({
     },
   });
 
-  console.log(user_id);
-
   if (user_id === undefined || user_id === 0) {
     toast({
       title: "No user_id",

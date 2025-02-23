@@ -59,3 +59,12 @@ export type LoanBookType = {
     description: string; 
     average_rating: number;
  } 
+
+ export type ReviewLists = {
+    review_id: number,
+    user_id: number,
+    user_name: string,
+    rating: number,
+    review_text: string,
+    created_at: string
+ }

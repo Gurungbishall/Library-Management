@@ -37,10 +37,10 @@ const threeMonthsFromToday = addMonths(new Date(), 3);
 
 export const AddBookinLoanList = ({
   book_id,
-  setBoolean,
+  setDefault,
 }: {
   book_id: number;
-  setBoolean: React.Dispatch<React.SetStateAction<boolean>>;
+  setDefault: React.Dispatch<React.SetStateAction<string>>;
 }) => {
   const { user_Id } = useSession();
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -76,7 +76,7 @@ export const AddBookinLoanList = ({
           description: result.message,
           variant: "default",
         });
-        setBoolean(false);
+        setDefault("default");
       }
     } catch {
       toast({

@@ -6,10 +6,11 @@ import Image from "next/image";
 import { renderStars } from "../renderStars/renderStars";
 import bookImg from "../../picture/The_Great_Gatsby_Cover_1925_Retouched.jpg";
 import { AddBookinLoanList } from "../loans/addBookInloanList";
+import { AddReview } from "../review/addReview";
 
 export const BookDetail = ({ data }: { data: BookType }) => {
-  const [selectedBook, setSelectedBook] = useState<boolean>(false);
   const [selectedBookId, setSelectedBookId] = useState<number>();
+  const [addItem, setAddItem] = useState<string>("default");
 
   return (
     <>
@@ -43,31 +44,48 @@ export const BookDetail = ({ data }: { data: BookType }) => {
             <span className="font-semibold md:text-xl">Description: </span>
             <div>{data.description}</div>
           </div>
-          <div></div>
           <Button
             className="w-1/2 md:w-1/4"
             onClick={(e) => {
               e.stopPropagation();
               setSelectedBookId(data.book_id);
-              setSelectedBook(true);
+              setAddItem("loan");
             }}
           >
             Borrow
           </Button>
+          <Button
+            className="w-1/2 md:w-1/4"
+            onClick={(e) => {
+              e.stopPropagation();
+              setSelectedBookId(data.book_id);
+              setAddItem("review");
+            }}
+          >
+            Review
+          </Button>
         </div>
       </div>
-      {selectedBook && selectedBookId !== undefined && (
+      {addItem === "loan" && selectedBookId !== undefined && (
         <div className="absolute w-screen h-screen inset-0 flex justify-center items-center bg-black bg-opacity-50">
           <X
             className="top-20 left-5 p-1 md:size-8 absolute bg-white rounded-lg"
             onClick={() => {
-              setSelectedBook(false);
+              setAddItem("default");
             }}
           />
-          <AddBookinLoanList
-            book_id={selectedBookId}
-            setBoolean={setSelectedBook}
+          <AddBookinLoanList book_id={selectedBookId} setDefault={setAddItem} />
+        </div>
+      )}
+      {addItem === "review" && selectedBookId !== undefined && (
+        <div className="absolute w-screen h-screen inset-0 flex justify-center items-center bg-black bg-opacity-50">
+          <X
+            className="top-20 left-5 p-1 md:size-8 absolute bg-white rounded-lg"
+            onClick={() => {
+              setAddItem("default");
+            }}
           />
+          <AddReview  book_id={selectedBookId} setDefault={setAddItem}/>
         </div>
       )}
     </>

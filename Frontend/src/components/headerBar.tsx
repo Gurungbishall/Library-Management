@@ -52,7 +52,7 @@ const HeaderBar = () => {
           <div className="flex md:gap-2 items-center">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="icon">
+                <Button className="rounded-3xl" size="icon">
                   <Avatar>
                     <AvatarImage
                       src={
