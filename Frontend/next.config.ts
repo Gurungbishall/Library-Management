@@ -2,7 +2,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   images: {
-    domains: ['localhost', 'your-production-domain.com'], 
+    domains: ['localhost', 'https://library-management-3mgz.onrender.com'], 
   },
 };
 
