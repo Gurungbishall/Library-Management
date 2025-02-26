@@ -18,6 +18,7 @@ interface AuthContextType {
   user_Id: string | null;
   book_Id: number | null;
   member_Id: number | null;
+  course: string | null;
   route: string;
   logOut: () => Promise<void>;
   fetchUserDetails: () => Promise<void>;
@@ -27,6 +28,7 @@ interface AuthContextType {
   setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
   setBook_Id: React.Dispatch<React.SetStateAction<number | null>>;
   setMember_Id: React.Dispatch<React.SetStateAction<number | null>>;
+  setCourse: React.Dispatch<React.SetStateAction<string | null>>;
   setRoute: React.Dispatch<React.SetStateAction<string>>;
   loading: boolean;
 }
@@ -48,6 +50,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user_Id, setUser_Id] = useState<string | null>("");
   const [book_Id, setBook_Id] = useState<number | null>(null);
   const [member_Id, setMember_Id] = useState<number | null>(null);
+  const [course, setCourse] = useState<string | null>("");
+
   const [route, setRoute] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
   const Url = process.env.NEXT_PUBLIC_API;
@@ -84,6 +88,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       const result = await response.json();
       setUser(result.user);
       setIsAuthenticated(true);
+      setCourse(result.user.course);
       setIsAdmin(result.user.role == "admin");
     } catch {
       toast({
@@ -153,6 +158,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         user_Id,
         book_Id,
         member_Id,
+        course,
         route,
         setIsAdmin,
         setIsAuthenticated,
@@ -162,6 +168,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         logOut,
         setBook_Id,
         setMember_Id,
+        setCourse,
         setRoute,
         loading,
       }}

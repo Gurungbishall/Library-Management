@@ -122,10 +122,12 @@ export const getBookOnCategory = async (req, res) => {
     let params = [];
 
     if (category) {
-      query += " WHERE category = $1";
+      query += " WHERE category ILIKE $1";
       params = [category];
     }
 
+    query += " LIMIT 20";
+    
     const result = await pool.query(query, params);
 
     if (result.rows.length === 0) {
@@ -280,4 +282,3 @@ export const deleteBook = async (req, res) => {
     return res.status(500).json({ message: "Internal Server Error" });
   }
 };
-

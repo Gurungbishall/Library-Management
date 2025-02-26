@@ -45,7 +45,6 @@ export const fetchManageBooks = async ({
 }: {
   searchBook: string;
 }): Promise<BookType[]> => {
-  console.log(searchBook);
   try {
     const response = await fetch(
       `${Url}/search/manageBooks/?search_Book=${encodeURIComponent(
