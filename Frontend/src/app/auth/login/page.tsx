@@ -127,7 +127,11 @@ export default function Login() {
                         <FormItem>
                           <FormLabel>Email</FormLabel>
                           <FormControl>
-                            <Input placeholder="aa@email.com" {...field} />
+                            <Input
+                              placeholder="aa@email.com"
+                              {...field}
+                              disabled={loading}
+                            />
                           </FormControl>
 
                           <FormMessage />
@@ -146,6 +150,7 @@ export default function Login() {
                                 placeholder="Enter password"
                                 type={showPassword ? "text" : "password"}
                                 {...field}
+                                disabled={loading}
                               />
                               <div className="absolute right-3 top-2">
                                 <button

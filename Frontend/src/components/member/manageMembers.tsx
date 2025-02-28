@@ -14,13 +14,14 @@ import {
 } from "@/components/ui/table";
 import { X } from "lucide-react";
 import { Input } from "../ui/input";
-import AddBook from "@/components/member/addBook";
-import EditBook from "./editMember";
+import AddBook from "@/components/member/addMember";
+import EditMember from "./editMember";
 import bookImg from "../../picture/The_Great_Gatsby_Cover_1925_Retouched.jpg";
-import DeleteBook from "./deleteMember";
+import DeleteMember from "./deleteMember";
 import { fetchMembers } from "@/api/members/members";
 import { useSession } from "@/app/context/authContext";
 import { useRouter } from "next/navigation";
+import AddMember from "@/components/member/addMember";
 
 export const ManageMembers = () => {
   const [addItem, setAddItem] = useState<string>("default");
@@ -157,25 +158,25 @@ export const ManageMembers = () => {
         </div>
       </div>
       {addItem === "add" && (
-        <div className="absolute w-screen h-screen inset-0 flex justify-center items-center bg-black bg-opacity-50">
+        <div className="fixed w-screen h-screen inset-0 flex justify-center items-center bg-black bg-opacity-50">
           <X
             className="top-20 left-5 p-1 md:size-8 absolute bg-white rounded-lg"
             onClick={() => {
               setAddItem("default");
             }}
           />
-          <AddBook setDefault={setAddItem} />
+          <AddMember setDefault={setAddItem} />
         </div>
       )}
       {addItem === "edit" && (
-        <div className="absolute w-screen h-screen inset-0 flex justify-center items-center bg-black bg-opacity-50">
+        <div className="fixed w-screen h-screen inset-0 flex justify-center items-center bg-black bg-opacity-50">
           <X
             className="top-20 left-5 p-1 md:size-8 absolute bg-white rounded-lg"
             onClick={() => {
               setAddItem("default");
             }}
           />
-          <EditBook
+          <EditMember
             user_id={selectMemberID}
             data={selectMember}
             setDefault={setAddItem}
@@ -183,14 +184,14 @@ export const ManageMembers = () => {
         </div>
       )}
       {addItem === "delete" && (
-        <div className="absolute w-screen h-screen inset-0 flex justify-center items-center bg-black bg-opacity-50">
+        <div className="fixed w-screen h-screen inset-0 flex justify-center items-center bg-black bg-opacity-50">
           <X
             className="top-20 left-5 p-1 md:size-8 absolute bg-white rounded-lg"
             onClick={() => {
               setAddItem("default");
             }}
           />
-          <DeleteBook user_id={selectMemberID} setDefault={setAddItem} />
+          <DeleteMember user_id={selectMemberID} setDefault={setAddItem} />
         </div>
       )}
     </>

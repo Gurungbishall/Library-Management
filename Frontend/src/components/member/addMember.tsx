@@ -59,7 +59,7 @@ const FormSchema = z.object({
   bookimage: z.any().optional(),
 });
 
-export default function AddBook({
+export default function AddMember({
   setDefault,
 }: {
   setDefault: React.Dispatch<React.SetStateAction<string>>;

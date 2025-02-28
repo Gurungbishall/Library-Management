@@ -15,7 +15,6 @@ const Page = () => {
   const { course } = useSession();
 
   useEffect(() => {
-    console.log(course);
     const fetchData = async () => {
       const data = await fetchBooks("");
       setBooks(data);

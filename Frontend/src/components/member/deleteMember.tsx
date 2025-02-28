@@ -4,7 +4,8 @@ import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { deleteMember } from "@/api/members/members";
 import { Card, CardTitle } from "../ui/card";
-export default function DeleteBook({
+
+export default function DeleteMember({
   user_id,
   setDefault,
 }: {
