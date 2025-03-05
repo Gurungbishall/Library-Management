@@ -58,7 +58,7 @@ export const HeaderSearch = () => {
         {isLoading && <p>Loading...</p>}
 
         {searchedBooks.length > 0 && (
-          <div className="absolute bg-white shadow-lg mt-2 w-full h-80 rounded-md overflow-y-scroll z-10">
+          <div className="absolute bg-white shadow-lg mt-2 w-full max-h-80  rounded-md overflow-y-scroll z-10">
             <ul>
               {searchedBooks.map((book) => (
                 <Card

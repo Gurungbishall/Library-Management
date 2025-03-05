@@ -83,14 +83,16 @@ const userLogin = async (req, res) => {
 
     res.cookie("access_token", accessToken, {
       httpOnly: true,
-      secure: true, 
-      sameSite: 'None' 
+      secure: true,
+      sameSite: "None",
+      partitioned: true, 
     });
 
     res.cookie("refresh_token", refreshToken, {
       httpOnly: true,
-      secure: true, 
-      sameSite: 'None' 
+      secure: true,
+      sameSite: "None",
+      partitioned: true,
     });
 
     res.status(200).json({

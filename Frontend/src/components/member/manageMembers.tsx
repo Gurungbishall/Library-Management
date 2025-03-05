@@ -14,14 +14,12 @@ import {
 } from "@/components/ui/table";
 import { X } from "lucide-react";
 import { Input } from "../ui/input";
-import AddBook from "@/components/member/addMember";
 import EditMember from "./editMember";
 import bookImg from "../../picture/The_Great_Gatsby_Cover_1925_Retouched.jpg";
 import DeleteMember from "./deleteMember";
 import { fetchMembers } from "@/api/members/members";
 import { useSession } from "@/app/context/authContext";
 import { useRouter } from "next/navigation";
-import AddMember from "@/components/member/addMember";
 
 export const ManageMembers = () => {
   const [addItem, setAddItem] = useState<string>("default");
@@ -67,14 +65,6 @@ export const ManageMembers = () => {
               onChange={handleSearchChange}
             />
           </div>
-          <Button
-            className="px-2 py-1 text-xs md:p-3 md:text-base"
-            onClick={() => {
-              setAddItem("add");
-            }}
-          >
-            Add Member
-          </Button>
         </div>
         <div className="w-full h-full flex gap-4 overflow-x-auto">
           {data !== undefined && data.length > 0 ? (
@@ -114,6 +104,7 @@ export const ManageMembers = () => {
                         alt={member.name}
                         width={100}
                         height={100}
+                        priority
                       />
                     </TableCell>
                     <TableCell>{member.name}</TableCell>
@@ -157,17 +148,7 @@ export const ManageMembers = () => {
           )}
         </div>
       </div>
-      {addItem === "add" && (
-        <div className="fixed w-screen h-screen inset-0 flex justify-center items-center bg-black bg-opacity-50">
-          <X
-            className="top-20 left-5 p-1 md:size-8 absolute bg-white rounded-lg"
-            onClick={() => {
-              setAddItem("default");
-            }}
-          />
-          <AddMember setDefault={setAddItem} />
-        </div>
-      )}
+
       {addItem === "edit" && (
         <div className="fixed w-screen h-screen inset-0 flex justify-center items-center bg-black bg-opacity-50">
           <X

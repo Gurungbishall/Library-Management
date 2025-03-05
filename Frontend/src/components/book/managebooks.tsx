@@ -36,7 +36,6 @@ export const ManageBooks = () => {
       } catch (error) {
         console.error("Error fetching books:", error);
         setData([]);
-      } finally {
       }
     };
 
@@ -77,18 +76,18 @@ export const ManageBooks = () => {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>#</TableHead>
-                  <TableHead>Image</TableHead>
-                  <TableHead>Title</TableHead>
-                  <TableHead>Author</TableHead>
-                  <TableHead>Category</TableHead>
-                  <TableHead>ISBN</TableHead>
-                  <TableHead>Publication Year</TableHead>
-                  <TableHead>Quantity</TableHead>
-                  <TableHead>Available</TableHead>
-                  <TableHead>Rating</TableHead>
-                  <TableHead>Description</TableHead>
-                  <TableHead>Action</TableHead>
+                  <TableHead className="w-12">#</TableHead>
+                  <TableHead className="w-28">Image</TableHead>
+                  <TableHead className="w-36">Title</TableHead>
+                  <TableHead className="w-32">Author</TableHead>
+                  <TableHead className="w-28">Category</TableHead>
+                  <TableHead className="w-24">ISBN</TableHead>
+                  <TableHead className="w-32">Publication Year</TableHead>
+                  <TableHead className="w-20">Quantity</TableHead>
+                  <TableHead className="w-20">Available</TableHead>
+                  <TableHead className="w-32">Rating</TableHead>
+                  <TableHead className="w-60">Description</TableHead>
+                  <TableHead className="w-32">Action</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -105,6 +104,8 @@ export const ManageBooks = () => {
                         alt={book.title}
                         width={100}
                         height={100}
+                        priority
+
                       />
                     </TableCell>
                     <TableCell>{book.title}</TableCell>
