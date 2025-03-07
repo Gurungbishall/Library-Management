@@ -66,7 +66,7 @@ export const BooksOnCategory = ({ data }: { data: BookType[] }) => {
         )}
       </div>
       {addItem === "loan" && selectedBookId !== undefined && (
-        <div className="absolute w-screen h-screen inset-0 flex justify-center items-center bg-black bg-opacity-50">
+        <div className="fixed w-screen h-screen inset-0 flex justify-center items-center bg-black bg-opacity-50">
           <X
             className="top-20 left-5 p-1 md:size-8 absolute bg-white rounded-lg"
             onClick={() => {

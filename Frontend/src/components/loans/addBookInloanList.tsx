@@ -88,7 +88,7 @@ export const AddBookinLoanList = ({
   }
 
   return (
-    <Card className="w-3/4 md:w-1/3 xl:w-1/4 h-1/4 flex flex-col items-center justify-center gap-3 rounded-xl">
+    <Card className="w-3/4 md:w-1/3 xl:w-1/4 h-1/4 flex flex-col items-center justify-center gap-3 rounded-xl p-4">
       <CardTitle className="text-base md:text-xl font-semibold">
         This is the book you want to loan?
       </CardTitle>
