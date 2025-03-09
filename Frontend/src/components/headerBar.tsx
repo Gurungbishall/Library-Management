@@ -18,7 +18,7 @@ import { useRouter } from "next/navigation";
 
 const HeaderBar = () => {
   const { setTheme } = useTheme();
-  const { user, loading, logOut } = useSession();
+  const { user, loading, logOut, isAdmin } = useSession();
   const router = useRouter();
 
   return (
@@ -81,7 +81,7 @@ const HeaderBar = () => {
             <span className="hidden md:block">{user?.name}</span>
           </div>
         )}
-        <HeaderSearch />
+        {!isAdmin ? <HeaderSearch /> : null}
         <TimeAndDate />
       </div>
       <div className="flex gap-8 items-center justify-center">

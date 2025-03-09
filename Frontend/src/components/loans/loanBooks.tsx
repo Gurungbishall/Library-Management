@@ -43,7 +43,7 @@ export const LoanBooks = ({ data }: { data: LoanBookType[] }) => {
                 className="md:w-36 md:h-44 rounded-l"
               />
 
-              <div className="text-xs sm:text-base md:text-lg font-semibold text-center line-clamp-2">
+              <div className="text-xs sm:text-base md:text-lg font-semibold text-center line-clamp-1">
                 {book.title}
               </div>
 

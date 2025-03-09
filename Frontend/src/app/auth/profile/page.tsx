@@ -12,12 +12,11 @@ import { useRouter } from "next/navigation";
 import EditUser from "@/components/user/editUser";
 
 export default function Page() {
-  const { user, user_Id, loading, } = useSession();
+  const { user, user_Id, loading, isAdmin } = useSession();
   const router = useRouter();
   const [addItem, setAddItem] = useState<string>("default");
   const [selectUserID, setSelectUserID] = useState<number | null>(0);
   const [selectUser, setSelectUser] = useState<UserType | null>(null);
-
 
   const parsedUserId = user_Id ? parseInt(user_Id, 10) : null;
   return (
@@ -29,7 +28,7 @@ export default function Page() {
           size="icon"
           className="top-20 left-5 p-2 md:size-8 absolute"
           onClick={() => {
-            router.push("/dashboard/user");
+            router.push(isAdmin ? "/dashboard/admin" : "/dashboard/user");
           }}
         >
           <X />
