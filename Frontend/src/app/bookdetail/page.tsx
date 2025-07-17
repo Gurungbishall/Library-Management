@@ -170,7 +170,8 @@ const Page = () => {
                 Book Not Found
               </h2>
               <p className="text-gray-600 dark:text-gray-300 mb-6">
-                The book you're looking for doesn't exist or has been removed.
+                The book you&apos;re looking for doesn&apos;t exist or has been
+                removed.
               </p>
               <Button
                 onClick={() => window.history.back()}

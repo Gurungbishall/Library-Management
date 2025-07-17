@@ -78,7 +78,7 @@ export const BookReviewLists = ({ data }: { data: ReviewLists[] }) => {
                         <span className="text-sm font-medium">Review</span>
                       </div>
                       <blockquote className="text-gray-700 dark:text-gray-300 leading-relaxed text-lg italic border-l-4 border-blue-500 pl-4">
-                        "{review.review_text}"
+                        &quot;{review.review_text}&quot;
                       </blockquote>
                     </div>
                   </div>
