@@ -18,27 +18,31 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 const chartData = [
-  { month: "January", desktop: 186 },
-  { month: "February", desktop: 305 },
-  { month: "March", desktop: 237 },
-  { month: "April", desktop: 73 },
-  { month: "May", desktop: 209 },
-  { month: "June", desktop: 214 },
+  { month: "January", loans: 186 },
+  { month: "February", loans: 305 },
+  { month: "March", loans: 237 },
+  { month: "April", loans: 173 },
+  { month: "May", loans: 209 },
+  { month: "June", loans: 234 },
 ];
 
 const chartConfig = {
-  desktop: {
-    label: "Desktop",
+  loans: {
+    label: "Book Loans",
     color: "hsl(var(--chart-1))",
   },
 } satisfies ChartConfig;
 
 export const LoanChart = () => {
   return (
-    <Card>
+    <Card className="border-0 shadow-lg bg-white dark:bg-slate-800 dark:border dark:border-slate-700">
       <CardHeader>
-        <CardTitle>Bar Chart</CardTitle>
-        <CardDescription>January - June 2024</CardDescription>
+        <CardTitle className="text-xl text-gray-900 dark:text-white">
+          Book Loan Statistics
+        </CardTitle>
+        <CardDescription className="text-gray-600 dark:text-gray-400">
+          January - June 2024
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
@@ -55,16 +59,17 @@ export const LoanChart = () => {
               cursor={false}
               content={<ChartTooltipContent hideLabel />}
             />
-            <Bar dataKey="desktop" fill="var(--color-desktop)" radius={8} />
+            <Bar dataKey="loans" fill="var(--color-loans)" radius={8} />
           </BarChart>
         </ChartContainer>
       </CardContent>
       <CardFooter className="flex-col items-start gap-2 text-sm">
-        <div className="flex gap-2 font-medium leading-none">
-          Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
+        <div className="flex gap-2 font-medium leading-none text-gray-900 dark:text-white">
+          Book loans increased by 12.3% this month{" "}
+          <TrendingUp className="h-4 w-4" />
         </div>
-        <div className="leading-none text-muted-foreground">
-          Showing total visitors for the last 6 months
+        <div className="leading-none text-gray-600 dark:text-gray-400">
+          Showing total book loans for the last 6 months
         </div>
       </CardFooter>
     </Card>

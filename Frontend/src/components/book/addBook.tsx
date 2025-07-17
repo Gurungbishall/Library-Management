@@ -1,11 +1,8 @@
 "use client";
 
-import { useState } from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { toast } from "@/components/hooks/use-toast";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -22,6 +19,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { BookOpen, Plus, Upload, X } from "lucide-react";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
 const FormSchema = z.object({
   title: z.string().min(1, { message: "Title is required" }),
@@ -141,205 +144,292 @@ export default function AddBook({
   };
 
   return (
-    <main className="flex  flex-col items-center justify-center bg-muted p-6 md:p-10">
-      <div className="w-full md:max-w-3xl">
-        <div className="flex flex-col gap-6 shadow-lg">
-          <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(onSubmit)}
-              className="p-6 md:p-8 flex flex-col gap-2 md:gap-6"
-            >
-              <p className="text-balance text-center text-muted-foreground">
-                Add a New Book to the Library
-              </p>
-              <div className="grid md:grid-cols-2 gap-1 md:gap-6">
-                <FormField
-                  control={form.control}
-                  name="title"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Book Title</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="The Great Gatsby"
-                          {...field}
-                          disabled={loading}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="author"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Author</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="F. Scott Fitzgerald"
-                          {...field}
-                          disabled={loading}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="category"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Category</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Fiction"
-                          {...field}
-                          disabled={loading}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="isbn"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>ISBN</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="9780743273565"
-                          {...field}
-                          disabled={loading}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="publication_year"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Publication Year</FormLabel>
-                      <Select
-                        onValueChange={(year) => {
-                          field.onChange(year);
-                        }}
-                        disabled={loading}
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select Year" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {Array.from({ length: 100 }, (_, index) => {
-                            const year = new Date().getFullYear() - index;
-                            return (
-                              <SelectItem key={year} value={String(year)}>
-                                {year}
-                              </SelectItem>
-                            );
-                          })}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="quantity"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Quantity</FormLabel>
-                      <FormControl>
-                        <Input placeholder="10" {...field} disabled={loading} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="available"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Available</FormLabel>
-                      <FormControl>
-                        <Input placeholder="8" {...field} disabled={loading} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="average_rating"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Average Rating</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="4.5"
-                          {...field}
-                          disabled={loading}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="description"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Description</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="text"
-                          placeholder="A classic novel set in the 1920s..."
-                          {...field}
-                          disabled={loading}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="bookimage"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Upload Image</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="file"
-                          accept="image/*"
-                          ref={field.ref}
-                          onChange={(e) => field.onChange(e.target.files)}
-                          disabled={loading}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <Button type="submit" disabled={loading}>
-                {loading ? "Loading" : "Add Book"}
-              </Button>
-            </form>
-          </Form>
+    <Card className="w-full max-w-4xl mx-auto border-0 shadow-2xl bg-white dark:bg-slate-900">
+      <CardHeader className="bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-t-lg">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-white/10 rounded-full">
+              <BookOpen className="w-6 h-6" />
+            </div>
+            <CardTitle className="text-2xl font-bold">Add New Book</CardTitle>
+          </div>
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            onClick={() => setDefault("default")}
+            className="text-white hover:bg-white/10"
+          >
+            <X className="w-5 h-5" />
+          </Button>
         </div>
-      </div>
-    </main>
+      </CardHeader>
+
+      <CardContent className="p-6">
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <div className="grid md:grid-cols-2 gap-6">
+              <FormField
+                control={form.control}
+                name="title"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                      Book Title *
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="The Great Gatsby"
+                        {...field}
+                        disabled={loading}
+                        className="focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="author"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                      Author *
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="F. Scott Fitzgerald"
+                        {...field}
+                        disabled={loading}
+                        className="focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="category"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                      Category *
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Fiction"
+                        {...field}
+                        disabled={loading}
+                        className="focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="isbn"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                      ISBN *
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="9780743273565"
+                        {...field}
+                        disabled={loading}
+                        className="focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="publication_year"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                      Publication Year *
+                    </FormLabel>
+                    <Select
+                      onValueChange={(year) => {
+                        field.onChange(year);
+                      }}
+                      disabled={loading}
+                    >
+                      <SelectTrigger className="focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400">
+                        <SelectValue placeholder="Select Year" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {Array.from({ length: 100 }, (_, index) => {
+                          const year = new Date().getFullYear() - index;
+                          return (
+                            <SelectItem key={year} value={String(year)}>
+                              {year}
+                            </SelectItem>
+                          );
+                        })}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="quantity"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                      Quantity *
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        type="number"
+                        min="1"
+                        placeholder="10"
+                        {...field}
+                        disabled={loading}
+                        className="focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="available"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                      Available *
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        type="number"
+                        min="0"
+                        placeholder="8"
+                        {...field}
+                        disabled={loading}
+                        className="focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="average_rating"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                      Average Rating *
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        type="number"
+                        min="0"
+                        max="5"
+                        step="0.1"
+                        placeholder="4.5"
+                        {...field}
+                        disabled={loading}
+                        className="focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Description *
+                  </FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder="A classic novel set in the 1920s..."
+                      {...field}
+                      disabled={loading}
+                      rows={4}
+                      className="focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="bookimage"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Book Cover Image *
+                  </FormLabel>
+                  <FormControl>
+                    <div className="flex items-center gap-4">
+                      <Input
+                        type="file"
+                        accept="image/*"
+                        ref={field.ref}
+                        onChange={(e) => field.onChange(e.target.files)}
+                        disabled={loading}
+                        className="focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
+                      />
+                      <Upload className="w-5 h-5 text-gray-400" />
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <div className="flex gap-4 pt-6">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setDefault("default")}
+                disabled={loading}
+                className="flex-1"
+              >
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                disabled={loading}
+                className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+              >
+                {loading ? (
+                  <div className="flex items-center gap-2">
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    Adding...
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-2">
+                    <Plus className="w-4 h-4" />
+                    Add Book
+                  </div>
+                )}
+              </Button>
+            </div>
+          </form>
+        </Form>
+      </CardContent>
+    </Card>
   );
 }
