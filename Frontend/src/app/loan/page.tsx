@@ -42,7 +42,7 @@ const Page = () => {
           try {
             const data = await fetchLoansBooks(userIdNumber);
             setLoanBooks(data);
-          } catch (error) {
+          } catch {
             toast({
               title: "Error Loading Books",
               description:
@@ -63,7 +63,6 @@ const Page = () => {
     fetchData();
   }, [user_Id]);
 
-  // Calculate statistics with null checking
   const totalLoans = loanBooks?.length || 0;
   const overdueBooks =
     loanBooks?.filter((book) => {
@@ -82,7 +81,6 @@ const Page = () => {
       return dueDate >= today && dueDate <= threeDaysFromNow;
     }).length || 0;
 
-  // Filter and sort books with null checking
   const filteredBooks = (loanBooks || [])
     .filter((book) => {
       const matchesSearch = book.title
@@ -116,7 +114,6 @@ const Page = () => {
       return 0;
     });
 
-  // Animation variants
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -172,7 +169,6 @@ const Page = () => {
         initial="hidden"
         animate="visible"
       >
-        {/* Header Section */}
         <motion.div
           className="text-center md:text-left"
           variants={itemVariants}
@@ -186,7 +182,6 @@ const Page = () => {
           </p>
         </motion.div>
 
-        {/* Statistics Cards */}
         <motion.div
           className="grid grid-cols-1 md:grid-cols-3 gap-6"
           variants={containerVariants}
@@ -262,7 +257,6 @@ const Page = () => {
           ))}
         </motion.div>
 
-        {/* Quick Actions */}
         <motion.div
           variants={itemVariants}
           className="flex flex-wrap gap-3 justify-center sm:justify-start"
@@ -296,7 +290,6 @@ const Page = () => {
           )}
         </motion.div>
 
-        {/* Search and Filter Controls */}
         <motion.div
           variants={itemVariants}
           className="flex flex-col sm:flex-row gap-4 items-center justify-between"
@@ -348,7 +341,6 @@ const Page = () => {
           </div>
         </motion.div>
 
-        {/* Books Section */}
         <motion.div variants={itemVariants}>
           <Card className="border-0 shadow-lg bg-white dark:bg-slate-800 dark:border dark:border-slate-700">
             <CardHeader>

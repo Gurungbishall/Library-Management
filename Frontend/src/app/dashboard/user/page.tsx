@@ -4,10 +4,8 @@ import { BooksOnCategory } from "@/components/dashboard/booksOnCategory";
 import HeaderBar from "@/components/headerBar";
 import { BookType } from "@/types/types.s";
 import { useEffect, useState } from "react";
-// import { ArticlesOnCategory } from "@/components/article/articlesOnCategory";
 import { fetchBooks } from "@/api/book/book";
 import { fetchLoansBooks } from "@/api/loan/loan";
-// import { fetchArticles } from "@/api/article/article";
 import { useSession } from "@/app/context/authContext";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { AnimatePresence, motion } from "framer-motion";
@@ -18,7 +16,6 @@ const Page = () => {
   const [loanBooks, setLoanBooks] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [isInClient, setIsInClient] = useState(false);
-  // const [articles, setArticles] = useState<ArticleType[]>([]);
   const { course, user_Id } = useSession();
 
   useEffect(() => {
@@ -31,7 +28,6 @@ const Page = () => {
           const selectData = await fetchBooks(course);
           setSelectBooks(selectData);
         }
-        // Fetch loan books if user is authenticated
         if (user_Id) {
           const userIdNumber = Number(user_Id);
           if (!isNaN(userIdNumber)) {
@@ -39,8 +35,6 @@ const Page = () => {
             setLoanBooks(loanData);
           }
         }
-        // const articleData = await fetchArticles("");
-        // setArticles(articleData);
       } catch (error) {
         console.error("Failed to fetch data:", error);
       } finally {
@@ -50,7 +44,6 @@ const Page = () => {
     fetchData();
   }, [course, user_Id]);
 
-  // Calculate statistics with null checking
   const totalBooks = books?.length || 0;
   const courseBooks = selectBooks?.length || 0;
   const totalLoans = loanBooks?.length || 0;
@@ -61,7 +54,6 @@ const Page = () => {
       return dueDate < today;
     }).length || 0;
 
-  // Animation variants
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -116,7 +108,7 @@ const Page = () => {
     setIsInClient(true);
   }, []);
 
-  if (!isInClient) return null; // Ensure client-side rendering
+  if (!isInClient) return null;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-slate-900 dark:via-slate-800 dark:to-indigo-900">
@@ -128,7 +120,6 @@ const Page = () => {
         initial="hidden"
         animate="visible"
       >
-        {/* Welcome Section */}
         <motion.div
           className="text-center md:text-left"
           variants={itemVariants}
@@ -140,7 +131,6 @@ const Page = () => {
             Explore your personalized library experience
           </p>
         </motion.div>
-        {/* Statistics Cards */}
         <motion.div
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
           variants={containerVariants}
@@ -193,46 +183,7 @@ const Page = () => {
             </motion.div>
           ))}
         </motion.div>
-        {/* Quick Actions */}
-        {/* <motion.div variants={itemVariants}>
-          <Card className="border-0 shadow-lg bg-white dark:bg-slate-800 dark:border dark:border-slate-700">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-xl text-gray-900 dark:text-white">
-                <Clock className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-                Quick Actions
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <motion.button
-                  className="p-4 bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-lg hover:shadow-lg transition-all duration-300 flex items-center gap-3"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  <BookOpen className="w-5 h-5" />
-                  Browse Books
-                </motion.button>
-                <motion.button
-                  className="p-4 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-lg hover:shadow-lg transition-all duration-300 flex items-center gap-3"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  <Users className="w-5 h-5" />
-                  Join Study Group
-                </motion.button>
-                <motion.button
-                  className="p-4 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg hover:shadow-lg transition-all duration-300 flex items-center gap-3"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  <Calendar className="w-5 h-5" />
-                  View Schedule
-                </motion.button>
-              </div>
-            </CardContent>
-          </Card>
-        </motion.div> */}
-        {/* Books Sections */}
+
         <div className="space-y-8">
           <motion.div className="space-y-6" variants={itemVariants}>
             <Card className="border-0 shadow-lg bg-white dark:bg-slate-800 dark:border dark:border-slate-700">
@@ -318,88 +269,7 @@ const Page = () => {
             </motion.div>
           )}
         </div>
-        {/* Reading Progress Section */}
-        {/* <motion.div variants={itemVariants}>
-          <Card className="border-0 shadow-lg bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 dark:bg-slate-800 dark:border dark:border-slate-700">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-xl text-gray-900 dark:text-white">
-                <Star className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
-                Reading Progress
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600 dark:text-gray-300">
-                    Monthly Goal
-                  </span>
-                  <span className="font-semibold text-gray-900 dark:text-white">
-                    {readingProgress}% Complete
-                  </span>
-                </div>
-                <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3">
-                  <motion.div
-                    className="h-3 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full"
-                    initial={{ width: 0 }}
-                    animate={{ width: `${readingProgress}%` }}
-                    transition={{ duration: 1.5, ease: "easeOut" }}
-                  />
-                </div>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-4">
-                  <div className="text-center">
-                    <p className="text-2xl font-bold text-indigo-600 dark:text-indigo-400">
-                      {booksRead}
-                    </p>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
-                      Books Read
-                    </p>
-                  </div>
-                  <div className="text-center">
-                    <p className="text-2xl font-bold text-purple-600 dark:text-purple-400">
-                      {Math.floor(Math.random() * 50) + 20}
-                    </p>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
-                      Hours Read
-                    </p>
-                  </div>
-                  <div className="text-center">
-                    <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">
-                      {Math.floor(Math.random() * 10) + 5}
-                    </p>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
-                      Favorites
-                    </p>
-                  </div>
-                  <div className="text-center">
-                    <p className="text-2xl font-bold text-green-600 dark:text-green-400">
-                      {Math.floor(Math.random() * 20) + 10}
-                    </p>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
-                      Reviews
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </motion.div> */}
-        {/* Commented Articles Section */}
-        {/* <motion.div 
-          className="space-y-6"
-          variants={itemVariants}
-        >
-          <Card className="border-0 shadow-lg">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-xl">
-                <FileText className="w-5 h-5 text-orange-600" />
-                Latest Articles
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <ArticlesOnCategory data={articles} />
-            </CardContent>
-          </Card>
-        </motion.div> */}
+   
       </motion.main>
     </div>
   );

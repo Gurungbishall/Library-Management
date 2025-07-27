@@ -47,7 +47,6 @@ const Page = () => {
     fetchData();
   }, []);
 
-  // Calculate statistics
   const totalBooks = books?.length || 0;
   const totalMembers = members?.length || 0;
   const activeMembers =
@@ -55,7 +54,6 @@ const Page = () => {
   const adminCount =
     members?.filter((member) => member.role === "admin")?.length || 0;
 
-  // Animation variants
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -150,7 +148,6 @@ const Page = () => {
         initial="hidden"
         animate="visible"
       >
-        {/* Welcome Section */}
         <motion.div
           className="text-center md:text-left"
           variants={itemVariants}
@@ -163,7 +160,6 @@ const Page = () => {
           </p>
         </motion.div>
 
-        {/* Statistics Cards */}
         <motion.div
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
           variants={containerVariants}
@@ -220,7 +216,6 @@ const Page = () => {
           ))}
         </motion.div>
 
-        {/* Quick Actions */}
         <motion.div variants={itemVariants}>
           <Card className="border-0 shadow-lg bg-white dark:bg-slate-800 dark:border dark:border-slate-700">
             <CardHeader>
@@ -263,7 +258,6 @@ const Page = () => {
           </Card>
         </motion.div>
 
-        {/* Charts Section */}
         <motion.div
           className="grid grid-cols-1 lg:grid-cols-2 gap-6"
           variants={itemVariants}

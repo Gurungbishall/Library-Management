@@ -86,16 +86,13 @@ export const ManageMembers = () => {
     setSearchQuery(e.target.value);
   };
 
-  // Filter members by role
   const filteredMembers = data.filter((member) => {
     if (roleFilter === "all") return true;
     return member.role.toLowerCase() === roleFilter.toLowerCase();
   });
 
-  // Get unique roles for filter
   const roles = [...new Set(data.map((member) => member.role))];
 
-  // Calculate statistics
   const totalMembers = data.length;
   const activeStudents = data.filter((member) => member.studying).length;
   const adminCount = data.filter((member) => member.role === "admin").length;
@@ -103,7 +100,6 @@ export const ManageMembers = () => {
 
   return (
     <div className="space-y-6">
-      {/* Statistics Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -194,7 +190,6 @@ export const ManageMembers = () => {
         </motion.div>
       </div>
 
-      {/* Search and Filter Controls */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -242,7 +237,6 @@ export const ManageMembers = () => {
         </Card>
       </motion.div>
 
-      {/* Members Table */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -448,7 +442,6 @@ export const ManageMembers = () => {
         </Card>
       </motion.div>
 
-      {/* Modals */}
       <AnimatePresence>
         {addItem === "add" && (
           <motion.div

@@ -37,7 +37,7 @@ export const BooksOnCategory = ({ data }: { data: BookType[] }) => {
     <motion.div variants={containerVariants} initial="hidden" animate="visible">
       <div className="w-full flex gap-6 overflow-x-auto pb-4">
         {data && data.length > 0 ? (
-          data.map((book, index) => (
+          data.map((book) => (
             <motion.div
               key={book.book_id}
               variants={itemVariants}
@@ -49,7 +49,6 @@ export const BooksOnCategory = ({ data }: { data: BookType[] }) => {
               whileTap={{ scale: 0.95 }}
             >
               <Card className="w-64 h-96 flex-shrink-0 cursor-pointer relative overflow-hidden border-0 shadow-lg hover:shadow-2xl transition-all duration-300 bg-white dark:bg-slate-800 group">
-                {/* Book Image */}
                 <div
                   className="relative h-3/5 bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-700 dark:to-slate-800"
                   onClick={() => {
@@ -69,7 +68,6 @@ export const BooksOnCategory = ({ data }: { data: BookType[] }) => {
                     className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
                   />
 
-                  {/* Overlay with quick actions */}
                   <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-3">
                     <Button
                       size="sm"
@@ -96,7 +94,6 @@ export const BooksOnCategory = ({ data }: { data: BookType[] }) => {
                     </Button>
                   </div>
 
-                  {/* Availability badge */}
                   <div
                     className={`absolute top-3 left-3 px-2 py-1 rounded-full text-xs font-semibold ${
                       book.available > 0
@@ -110,7 +107,6 @@ export const BooksOnCategory = ({ data }: { data: BookType[] }) => {
                   </div>
                 </div>
 
-                {/* Book Info */}
                 <div className="p-4 h-2/5 flex flex-col justify-between">
                   <div className="space-y-2 flex-1">
                     <h3
@@ -163,7 +159,6 @@ export const BooksOnCategory = ({ data }: { data: BookType[] }) => {
         )}
       </div>
 
-      {/* Borrow Book Modal */}
       <AnimatePresence>
         {addItem === "loan" && selectedBookId !== undefined && (
           <motion.div

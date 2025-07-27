@@ -16,7 +16,6 @@ const Page = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
       >
-        {/* Page Header */}
         <motion.div
           className="mb-8 text-center md:text-left"
           initial={{ opacity: 0, y: 20 }}
@@ -38,7 +37,6 @@ const Page = () => {
           </div>
         </motion.div>
 
-        {/* Main Content */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

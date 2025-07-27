@@ -53,7 +53,6 @@ export const BookDetail = ({
       <Card className="overflow-hidden border-0 shadow-2xl bg-gradient-to-br from-white/90 to-white/70 dark:from-gray-900/90 dark:to-gray-800/70 backdrop-blur-sm">
         <CardContent className="p-0">
           <div className="relative flex flex-col lg:flex-row">
-            {/* Book Image Section */}
             <motion.div
               className="lg:w-2/5 p-8 lg:p-12 flex justify-center lg:justify-start items-center bg-gradient-to-br from-slate-50 to-blue-50 dark:from-slate-800 dark:to-blue-900"
               initial={{ x: -50, opacity: 0 }}
@@ -79,7 +78,6 @@ export const BookDetail = ({
                     onLoad={() => setImageLoaded(true)}
                   />
 
-                  {/* Floating Action Buttons */}
                   <motion.div
                     className="absolute top-4 right-4 flex flex-col gap-2"
                     initial={{ scale: 0 }}
@@ -103,7 +101,6 @@ export const BookDetail = ({
                   </motion.div>
                 </motion.div>
 
-                {/* Availability Badge */}
                 <motion.div
                   className={`absolute -bottom-2 -right-2 px-3 py-1.5 rounded-full text-xs font-semibold ${availability.bgColor} ${availability.color} shadow-lg`}
                   initial={{ scale: 0 }}
@@ -115,14 +112,12 @@ export const BookDetail = ({
               </div>
             </motion.div>
 
-            {/* Book Information Section */}
             <motion.div
               className="lg:w-3/5 p-8 lg:p-12 flex flex-col justify-center"
               initial={{ x: 50, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               transition={{ duration: 0.6, delay: 0.3 }}
             >
-              {/* Title and Author */}
               <div className="mb-6">
                 <motion.h1
                   className="text-3xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-3 leading-tight"
@@ -143,7 +138,6 @@ export const BookDetail = ({
                 </motion.div>
               </div>
 
-              {/* Rating and Category */}
               <motion.div
                 className="flex flex-wrap items-center gap-6 mb-6"
                 initial={{ y: 20, opacity: 0 }}
@@ -161,7 +155,6 @@ export const BookDetail = ({
                 </div>
               </motion.div>
 
-              {/* Stats */}
               <motion.div
                 className="grid grid-cols-2 gap-4 mb-6"
                 initial={{ y: 20, opacity: 0 }}
@@ -188,7 +181,6 @@ export const BookDetail = ({
                 </div>
               </motion.div>
 
-              {/* Description */}
               <motion.div
                 className="mb-8"
                 initial={{ y: 20, opacity: 0 }}
@@ -203,7 +195,6 @@ export const BookDetail = ({
                 </p>
               </motion.div>
 
-              {/* Action Buttons */}
               <motion.div
                 className="flex flex-col sm:flex-row gap-4"
                 initial={{ y: 20, opacity: 0 }}
@@ -255,7 +246,6 @@ export const BookDetail = ({
         </CardContent>
       </Card>
 
-      {/* Modals */}
       <AnimatePresence>
         {addItem === "loan" && selectedBookId !== undefined && (
           <motion.div

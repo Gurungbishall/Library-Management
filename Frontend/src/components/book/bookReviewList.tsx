@@ -29,7 +29,7 @@ export const BookReviewLists = ({ data }: { data: ReviewLists[] }) => {
     >
       {data && data.length > 0 ? (
         <motion.div className="grid gap-6" variants={containerVariants}>
-          {data.map((review, index) => (
+          {data.map((review) => (
             <motion.div
               key={review.review_id}
               variants={itemVariants}
@@ -39,7 +39,6 @@ export const BookReviewLists = ({ data }: { data: ReviewLists[] }) => {
               <Card className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 bg-white dark:bg-slate-800 overflow-hidden">
                 <CardContent className="p-6">
                   <div className="flex flex-col lg:flex-row gap-6">
-                    {/* User Info and Rating */}
                     <div className="lg:w-1/3 space-y-4">
                       <div className="flex items-center gap-3">
                         <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-full flex items-center justify-center text-white font-bold text-lg">
@@ -71,7 +70,6 @@ export const BookReviewLists = ({ data }: { data: ReviewLists[] }) => {
                       </div>
                     </div>
 
-                    {/* Review Content */}
                     <div className="lg:w-2/3 space-y-3">
                       <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
                         <MessageCircle className="w-4 h-4" />

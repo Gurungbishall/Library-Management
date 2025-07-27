@@ -37,9 +37,6 @@ const FormSchema = z.object({
     ),
 });
 
-const today = new Date();
-const threeMonthsFromToday = addMonths(new Date(), 3);
-
 export const AddBookinLoanList = ({
   book_id,
   setDefault,
@@ -90,7 +87,7 @@ export const AddBookinLoanList = ({
         });
         setDefault("default");
       }
-    } catch (error) {
+    } catch {
       toast({
         title: "Submission failed!",
         description:

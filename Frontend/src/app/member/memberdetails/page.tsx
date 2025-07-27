@@ -70,7 +70,6 @@ const Page = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          {/* Back Button */}
           <motion.div
             className="mb-6"
             initial={{ opacity: 0, x: -20 }}
@@ -87,7 +86,6 @@ const Page = () => {
             </Button>
           </motion.div>
 
-          {/* Page Header */}
           <motion.div
             className="mb-8 text-center md:text-left"
             initial={{ opacity: 0, y: 20 }}
@@ -109,7 +107,6 @@ const Page = () => {
             </div>
           </motion.div>
 
-          {/* Member Details */}
           <motion.div
             className="mb-8"
             initial={{ opacity: 0, y: 20 }}
@@ -119,7 +116,6 @@ const Page = () => {
             <GetIndividualDetail userData={userDetail} />
           </motion.div>
 
-          {/* Tab Selection */}
           <motion.div
             className="mb-8"
             initial={{ opacity: 0, y: 20 }}
@@ -163,7 +159,6 @@ const Page = () => {
             </Card>
           </motion.div>
 
-          {/* Content Area */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}

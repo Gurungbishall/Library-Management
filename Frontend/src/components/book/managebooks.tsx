@@ -75,7 +75,6 @@ export const ManageBooks = () => {
     setSearchQuery(e.target.value);
   };
 
-  // Filter and sort books
   const filteredAndSortedBooks = data
     .filter((book) => {
       if (categoryFilter === "all") return true;
@@ -100,7 +99,6 @@ export const ManageBooks = () => {
 
   const categories = [...new Set(data.map((book) => book.category))];
 
-  // Calculate statistics
   const totalBooks = data.length;
   const totalAvailable = data.reduce((sum, book) => sum + book.available, 0);
   const totalBorrowed = data.reduce(
@@ -114,7 +112,6 @@ export const ManageBooks = () => {
 
   return (
     <div className="space-y-6">
-      {/* Statistics Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -205,7 +202,6 @@ export const ManageBooks = () => {
         </motion.div>
       </div>
 
-      {/* Search and Filter Controls */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -269,7 +265,6 @@ export const ManageBooks = () => {
         </Card>
       </motion.div>
 
-      {/* Books Grid */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -320,7 +315,6 @@ export const ManageBooks = () => {
                         />
                       </div>
 
-                      {/* Action Buttons Overlay */}
                       <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
@@ -357,7 +351,6 @@ export const ManageBooks = () => {
                         </DropdownMenu>
                       </div>
 
-                      {/* Availability Badge */}
                       <div className="absolute top-2 left-2">
                         <span
                           className={`px-2 py-1 text-xs font-medium rounded-full ${
@@ -449,7 +442,6 @@ export const ManageBooks = () => {
         )}
       </motion.div>
 
-      {/* Modals */}
       <AnimatePresence>
         {addItem === "add" && (
           <motion.div

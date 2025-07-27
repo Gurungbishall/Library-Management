@@ -15,7 +15,7 @@ import bookImg from "../../picture/The_Great_Gatsby_Cover_1925_Retouched.jpg";
 import { Badge } from "../ui/badge";
 
 export const GetIndividualDetail = ({ userData }: { userData: UserType }) => {
-  const getGenderIcon = (gender: string) => {
+  const getGenderIcon = () => {
     return <User className="w-4 h-4" />;
   };
 
@@ -141,7 +141,7 @@ export const GetIndividualDetail = ({ userData }: { userData: UserType }) => {
 
                 <div className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-slate-700 rounded-lg">
                   <div className="p-2 bg-pink-100 dark:bg-pink-900/30 rounded-full">
-                    {getGenderIcon(userData.sex)}
+                    {getGenderIcon()}
                   </div>
                   <div>
                     <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
@@ -154,7 +154,6 @@ export const GetIndividualDetail = ({ userData }: { userData: UserType }) => {
                 </div>
               </motion.div>
 
-              {/* Academic Information */}
               <motion.div
                 className="p-4 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-lg"
                 initial={{ opacity: 0, y: 20 }}

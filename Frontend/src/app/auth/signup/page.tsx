@@ -90,12 +90,10 @@ export default function Register() {
     },
   });
 
-  // Handle file upload and preview
   const handleFileChange = (files: FileList | null) => {
     if (files && files[0]) {
       const file = files[0];
 
-      // Validate file type
       if (!file.type.startsWith("image/")) {
         toast({
           title: "Invalid file type",
@@ -105,7 +103,6 @@ export default function Register() {
         return;
       }
 
-      // Validate file size (5MB max)
       if (file.size > 5 * 1024 * 1024) {
         toast({
           title: "File too large",
@@ -115,19 +112,16 @@ export default function Register() {
         return;
       }
 
-      // Create preview
       const reader = new FileReader();
       reader.onload = (e) => {
         setImagePreview(e.target?.result as string);
       };
       reader.readAsDataURL(file);
 
-      // Update form
       form.setValue("userimage", files);
     }
   };
 
-  // Handle drag events
   const handleDrag = (e: React.DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -138,7 +132,6 @@ export default function Register() {
     }
   };
 
-  // Handle drop
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -149,12 +142,10 @@ export default function Register() {
     }
   };
 
-  // Remove image
   const removeImage = () => {
     setImagePreview(null);
     form.setValue("userimage", undefined);
 
-    // Clear the file input value to allow selecting the same file again
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
@@ -212,7 +203,6 @@ export default function Register() {
 
   return (
     <main className="flex min-h-svh flex-col items-center justify-center bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50 p-6 md:p-10 relative overflow-hidden">
-      {/* Background animated elements */}
       <div className="absolute inset-0 overflow-hidden">
         <motion.div
           className="absolute -top-10 -left-10 w-40 h-40 bg-green-200 rounded-full opacity-20"
@@ -281,7 +271,6 @@ export default function Register() {
         >
           <Card className="overflow-hidden shadow-2xl border-0 bg-white/80 backdrop-blur-sm">
             <CardContent className="grid p-0 lg:grid-cols-5">
-              {/* Left side - Welcome section */}
               <motion.div
                 className="relative hidden lg:block lg:col-span-2 bg-gradient-to-br from-green-600 via-emerald-600 to-teal-600"
                 initial={{ opacity: 0, x: -50 }}
@@ -697,7 +686,6 @@ export default function Register() {
                                     stiffness: 300,
                                   }}
                                 >
-                                  {/* Image Preview */}
                                   <AnimatePresence>
                                     {imagePreview && (
                                       <motion.div
@@ -724,7 +712,6 @@ export default function Register() {
                                     )}
                                   </AnimatePresence>
 
-                                  {/* Upload Area */}
                                   <motion.div
                                     className={`relative border-2 border-dashed rounded-lg p-6 text-center transition-all duration-300 ${
                                       dragActive

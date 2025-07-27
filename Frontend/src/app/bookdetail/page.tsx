@@ -50,7 +50,6 @@ const Page = () => {
     };
   }, [book_Id]);
 
-  // Animation variants
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -98,7 +97,6 @@ const Page = () => {
             initial="hidden"
             animate="visible"
           >
-            {/* Back Navigation */}
             <motion.div variants={itemVariants}>
               <Button
                 variant="ghost"
@@ -110,12 +108,10 @@ const Page = () => {
               </Button>
             </motion.div>
 
-            {/* Book Detail */}
             <motion.div variants={itemVariants}>
               <BookDetail data={book} reviewCount={reviewList?.length || 0} />
             </motion.div>
 
-            {/* Similar Books Section */}
             <motion.div variants={itemVariants} className="space-y-6">
               <div className="text-center">
                 <motion.h2
@@ -137,7 +133,6 @@ const Page = () => {
               <BooksOnCategory data={books} />
             </motion.div>
 
-            {/* Reviews Section */}
             <motion.div variants={itemVariants} className="space-y-6">
               <div className="text-center">
                 <motion.h2

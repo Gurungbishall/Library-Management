@@ -81,7 +81,6 @@ export default function Page() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
       >
-        {/* Back Button */}
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
@@ -102,7 +101,6 @@ export default function Page() {
 
         {!loading ? (
           <div className="max-w-4xl mx-auto space-y-8">
-            {/* Profile Header */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -111,14 +109,11 @@ export default function Page() {
               <Card className="border-0 shadow-2xl bg-gradient-to-br from-white/90 to-white/70 dark:from-gray-900/90 dark:to-gray-800/70 backdrop-blur-sm overflow-hidden">
                 <CardContent className="p-0">
                   <div className="relative">
-                    {/* Background Pattern */}
                     <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-500 dark:from-blue-700 dark:to-purple-700 h-32"></div>
-                    {/* Light overlay for better text contrast in light mode */}
                     <div className="absolute inset-0 bg-white/20 dark:bg-black/20 h-32"></div>
 
                     <div className="relative pt-8 pb-6 px-6">
                       <div className="flex flex-col md:flex-row items-center md:items-end gap-6">
-                        {/* Profile Image */}
                         <motion.div
                           className="relative group"
                           whileHover={{ scale: 1.05 }}
@@ -137,13 +132,11 @@ export default function Page() {
                             />
                           </div>
 
-                          {/* Camera Icon Overlay */}
                           <div className="absolute inset-0 bg-black/40 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                             <Camera className="w-8 h-8 text-white" />
                           </div>
                         </motion.div>
 
-                        {/* User Info */}
                         <div className="text-center md:text-left flex-1">
                           <motion.h1
                             className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white drop-shadow-lg mb-2"
@@ -165,7 +158,6 @@ export default function Page() {
                           </motion.p>
                         </div>
 
-                        {/* Edit Button */}
                         <motion.div
                           initial={{ opacity: 0, scale: 0.8 }}
                           animate={{ opacity: 1, scale: 1 }}
@@ -190,7 +182,6 @@ export default function Page() {
               </Card>
             </motion.div>
 
-            {/* Profile Details */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -253,7 +244,6 @@ export default function Page() {
         )}
       </motion.main>
 
-      {/* Edit Modal */}
       <AnimatePresence>
         {addItem === "edit" && (
           <EditUser

@@ -101,7 +101,6 @@ export default function Login() {
 
   return (
     <main className="flex min-h-svh flex-col items-center justify-center bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-6 md:p-10 relative overflow-hidden">
-      {/* Background animated elements */}
       <div className="absolute inset-0 overflow-hidden">
         <motion.div
           className="absolute -top-10 -left-10 w-40 h-40 bg-blue-200 rounded-full opacity-20"
@@ -157,7 +156,6 @@ export default function Login() {
         >
           <Card className="overflow-hidden shadow-2xl border-0 bg-white/80 backdrop-blur-sm">
             <CardContent className="grid p-0 md:grid-cols-2">
-              {/* Left side - Welcome section */}
               <motion.div
                 className="relative hidden bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 md:block"
                 initial={{ opacity: 0, x: -50 }}
@@ -224,7 +222,6 @@ export default function Login() {
                 </div>
               </motion.div>
 
-              {/* Right side - Form section */}
               <motion.div
                 initial={{ opacity: 0, x: 50 }}
                 animate={{ opacity: 1, x: 0 }}

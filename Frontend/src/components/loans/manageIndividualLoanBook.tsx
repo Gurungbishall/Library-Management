@@ -98,7 +98,6 @@ export const ManageIndividualLoanBooks = () => {
     return () => clearTimeout(timeoutId);
   }, [searchQuery, member_Id]);
 
-  // Calculate statistics
   const totalLoans = data.length;
   const overdueLoans = data.filter(
     (book) => calculateDaysLeft(book.due_date) < 0
@@ -110,7 +109,6 @@ export const ManageIndividualLoanBooks = () => {
 
   return (
     <div className="space-y-6">
-      {/* Statistics Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -179,7 +177,6 @@ export const ManageIndividualLoanBooks = () => {
         </motion.div>
       </div>
 
-      {/* Search Control */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -200,7 +197,6 @@ export const ManageIndividualLoanBooks = () => {
         </Card>
       </motion.div>
 
-      {/* Loans Table */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -333,7 +329,6 @@ export const ManageIndividualLoanBooks = () => {
         </Card>
       </motion.div>
 
-      {/* Return Modal */}
       <AnimatePresence>
         {addItem === "return" && (
           <motion.div
